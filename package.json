@@ -1,0 +1,30 @@
+{
+  "name": "game",
+  "version": "0.0.0",
+  "description": "Our first game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify game.js -o build.js --noparse=pixi.js --im",
+    "watch": "watchify game.js -vo build.js --noparse=pixi.js --debug --im",
+    "start": "npm run build && npm run watch & instant"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Chris Jaure",
+  "license": "ISC",
+  "dependencies": {
+    "box-collide": "^1.0.1",
+    "browserify": "^8.0.3",
+    "combokeys": "^2.1.1",
+    "kb-controls": "^0.2.0",
+    "mousetrap": "^1.4.6",
+    "pixi.js": "^2.2.0",
+    "ticker": "^0.1.0"
+  },
+  "devDependencies": {
+    "instant-server": "^1.0.4",
+    "watchify": "^2.2.1"
+  }
+}
