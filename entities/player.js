@@ -55,9 +55,13 @@ Player.prototype = {
     },
     animateDirection: function(dir, frames) {
     	if (!this.entity.playing || dir !== this.direction) {
-    		this.entity.stop();
 			this.entity.textures = frames;
-			this.entity.gotoAndPlay(0);
+			if (dir == this.direction && this.entity.currentFrame + 1 !== this.entity.totalFrames) {
+				this.entity.gotoAndPlay(this.entity.currentFrame);
+			}
+			else {
+				this.entity.gotoAndPlay(0);
+			}
 			this.direction = dir;
     	}
     }
