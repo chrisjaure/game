@@ -7,7 +7,8 @@ var Player = function(game) {
 	this.assets = ['assets/sprite1.json'];
 };
 Player.prototype = {
-    create: function() {
+    create: function(scene) {
+		this.game = scene.game;
     	this.walkRightFrames = utils.frameRange(88, 95, 'sprite');
         this.walkLeftFrames = utils.frameRange(71, 78, 'sprite');
         this.walkUpFrames = utils.frameRange(62, 69, 'sprite');
@@ -47,8 +48,7 @@ Player.prototype = {
     	else {
     		this.entity.stop();
     	}
-    	if (utils.outOfWorldBounds(this.entity, this.game.renderer)
-    		|| (this.game.objects[1].entity.body && collide(utils.getBounds(this.entity), utils.getBounds(this.game.objects[1].entity)))) {
+    	if (utils.outOfWorldBounds(this.entity, this.game.renderer)) {
     		this.entity.x = origX;
     		this.entity.y = origY;
     	}

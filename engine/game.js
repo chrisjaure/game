@@ -22,24 +22,22 @@ Game.prototype = {
             '<down>': 'down'
         });
 
-        this.objects.forEach(function(obj) {
-            if (obj.create) {
-                obj.create(this);
-            }
-        }.bind(this));
+        this.scenes.forEach(scene => scene.create(this));
 
-        this.ticker = ticker(window, 60).on('tick', function(){
-            this.update();
-        }.bind(this)).on('draw', function(){
-            this.render();
-        }.bind(this));
+        this.ticker = ticker(window, 60)
+            .on('tick', this.update.bind(this))
+            .on('draw', this.render.bind(this));
     },
     preload: function(cb) {
         var assets = [];
         var loader;
-        this.objects.forEach(function(obj) {
-            if (obj.assets) {
-                assets = assets.concat(obj.assets);
+        this.scenes.forEach(scene => {
+            if (scene.entities) {
+                scene.entities.forEach(entity => {
+                    if (entity.assets) {
+                        assets = assets.concat(entity.assets);
+                    }
+                });
             }
         });
         if (assets.length) {
@@ -59,18 +57,18 @@ Game.prototype = {
         }.bind(this));
     },
     update: function() {
-        this.objects.forEach(function(obj) {
-            if (obj.update) {
-                obj.update(this);
+        this.scenes.forEach(scene => {
+            if (scene.active && scene.update) {
+                scene.update(this);
             }
-        }.bind(this));
+        });
         this.stage.children = utils.ySort(this.stage.children);
     },
     render: function() {
         this.renderer.render(this.stage);
     },
-    add: function(obj) {
-        this.objects.push(new obj(this));
+    addScene: function(scene) {
+        this.scenes.set(scene.name, scene);
     }
 };
 
