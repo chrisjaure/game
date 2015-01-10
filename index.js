@@ -5,12 +5,16 @@ var Scene = require('./engine/scene');
 var Player = require('./entities/player');
 var Tree = require('./entities/tree');
 
+// scenes
+var start = require('./scenes/start');
+var play = require('./scenes/play');
+
 var game = new Game();
-var startScene = new Scene('startScene');
-var player = new Player();
-startScene.addEntity(player);
-startScene.active = true;
-game.addScene(startScene);
-// game.add(Player);
-// game.add(Tree);
+game.addScene(start);
+game.addScene(play);
+
+start.on('inactive', function () {
+    play.active = true;
+});
+
 game.boot();

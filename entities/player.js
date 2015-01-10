@@ -19,7 +19,7 @@ Player.prototype = {
 		this.entity.animationSpeed = 0.1;
 		this.entity.loop = false;
 
-		this.game.stage.addChild(this.entity);
+		scene.stage.addChild(this.entity);
 		utils.setBoundingBox(this.entity, {
 			x: 15, y: this.entity.height - 8, width: 32, height: 8
 		});
