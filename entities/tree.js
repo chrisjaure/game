@@ -1,5 +1,5 @@
 var PIXI = require('pixi.js');
-var utils = require('../utils');
+var utils = require('../engine/utils');
 
 var Tree = function(game) {
 	this.game = game;
@@ -15,7 +15,7 @@ Tree.prototype = {
 // 		utils.showBoundingBox(this.entity);
 	},
 	update: function() {
-		
+
 	}
 };
 

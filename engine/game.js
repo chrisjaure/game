@@ -1,27 +1,26 @@
 var PIXI = require('pixi.js');
-var ticker = require('ticker');
 var kb = require('kb-controls');
+var ticker = require('ticker');
 var utils = require('./utils');
 
-// entities
-var Player = require('./entities/player');
-var Tree = require('./entities/tree');
-
-var Game = function() {
+var Game = function(width = 620, height = 400) {
     this.objects = [];
+    this.scenes = new Map();
+    this.width = width;
+    this.height = height;
 };
 Game.prototype = {
     create: function() {
-        this.stage = stage = new PIXI.Stage(0x000000);
-        this.renderer = PIXI.autoDetectRenderer(620, 400);
+        this.stage = new PIXI.Stage(0x000000);
+        this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);
 
         this.keyboard = kb({
-			'<left>': 'left',
-			'<right>': 'right',
-			'<up>': 'up',
-			'<down>': 'down'
-		});
+            '<left>': 'left',
+            '<right>': 'right',
+            '<up>': 'up',
+            '<down>': 'down'
+        });
 
         this.objects.forEach(function(obj) {
             if (obj.create) {
@@ -37,22 +36,23 @@ Game.prototype = {
     },
     preload: function(cb) {
         var assets = [];
+        var loader;
         this.objects.forEach(function(obj) {
             if (obj.assets) {
                 assets = assets.concat(obj.assets);
             }
         });
         if (assets.length) {
-			loader = new PIXI.AssetLoader(assets);
-			loader.on('onComplete', cb);
-			loader.load();
+            loader = new PIXI.AssetLoader(assets);
+            loader.on('onComplete', cb);
+            loader.load();
         }
         else {
-			cb();
+            cb();
         }
     },
     boot: function(cb) {
-    	cb = cb || function(){};
+        cb = cb || function(){};
         this.preload(function(){
             this.create();
             cb();
@@ -74,7 +74,4 @@ Game.prototype = {
     }
 };
 
-var game = new Game();
-game.add(Player);
-game.add(Tree);
-game.boot();
+module.exports = Game;

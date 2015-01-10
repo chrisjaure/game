@@ -1,5 +1,5 @@
 var PIXI = require('pixi.js');
-var utils = require('../utils');
+var utils = require('../engine/utils');
 var collide = require('box-collide');
 
 var Player = function(game) {

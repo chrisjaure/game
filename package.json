@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify game.js -o build.js --noparse=pixi.js --im",
-    "watch": "watchify game.js -vo build.js --noparse=pixi.js --debug --im",
-    "start": "npm run build && npm run watch & instant"
+    "build": "browserify index.js -t 6to5ify -o build.js --noparse=pixi.js --im",
+    "watch": "watchify index.js -t 6to5ify -o build.js --noparse=pixi.js --debug --im -v",
+    "start": "npm run build && npm run watch & instant 8000"
   },
   "keywords": [
     "game"
@@ -15,6 +15,7 @@
   "author": "Chris Jaure",
   "license": "ISC",
   "dependencies": {
+    "6to5ify": "^3.1.2",
     "box-collide": "^1.0.1",
     "browserify": "^8.0.3",
     "combokeys": "^2.1.1",
@@ -26,5 +27,8 @@
   "devDependencies": {
     "instant-server": "^1.0.4",
     "watchify": "^2.2.1"
+  },
+  "jshintConfig": {
+    "esnext": true
   }
 }
