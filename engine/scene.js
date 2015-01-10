@@ -13,7 +13,7 @@ class Scene extends EventEmitter {
         game.stage.addChild(this.stage);
         this.entities.forEach(entity => {
             if (entity.create) {
-                entity.create(this);
+                entity.create(this, game);
             }
         });
         this.emit('create');

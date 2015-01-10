@@ -1,70 +1,78 @@
 var PIXI = require('pixi.js');
 var utils = require('../engine/utils');
+var Entity = require('../engine/entity');
 var collide = require('box-collide');
 
-var Player = function(game) {
-	this.game = game;
-	this.assets = ['assets/sprite1.json'];
-};
-Player.prototype = {
-    create: function(scene) {
-		this.game = scene.game;
-    	this.walkRightFrames = utils.frameRange(88, 95, 'sprite');
-        this.walkLeftFrames = utils.frameRange(71, 78, 'sprite');
-        this.walkUpFrames = utils.frameRange(62, 69, 'sprite');
-        this.walkDownFrames = utils.frameRange(80, 87, 'sprite');
+class Player extends Entity {
+	constructor () {
+		this.assets = ['assets/ship.png'];
+	}
 
-		this.speed = 2;
-		this.entity = new PIXI.MovieClip(this.walkLeftFrames);
-		this.entity.animationSpeed = 0.1;
-		this.entity.loop = false;
+	create (scene, game) {
+		super.create(scene, game);
+
+		var image = new PIXI.ImageLoader(this.assets[0]);
+		image.loadFramedSpriteSheet(32, 32, 'ship');
+
+		this.flyFrames = image.frames.slice(1, 5);
+		this.stopFrames = image.frames.slice(5, 12);
+
+		var entity = this.entity = new PIXI.MovieClip(image.frames.slice(0, 1));
+		this.speed = 5;
+		entity.scale = { x: 1.5, y: 1.5 };
+		entity.animationSpeed = 0.3;
+		entity.loop = false;
+		entity.anchor = { x: 0.5, y: 0.5 };
 
 		scene.stage.addChild(this.entity);
-		utils.setBoundingBox(this.entity, {
-			x: 15, y: this.entity.height - 8, width: 32, height: 8
-		});
 // 		utils.showBoundingBox(this.entity);
-    },
-    update: function() {
-    	var keyboard = this.game.keyboard;
-    	var origX = this.entity.x;
-    	var origY = this.entity.y;
-    	if (keyboard.left) {
-    		this.entity.x -= this.speed;
-    		this.animateDirection('left', this.walkLeftFrames);
-    	}
-    	else if (keyboard.right) {
-    		this.entity.x += this.speed;
-    		this.animateDirection('right', this.walkRightFrames);
-    	}
-    	else if (keyboard.up) {
-    		this.entity.y -= this.speed;
-    		this.animateDirection('up', this.walkUpFrames);
-    	}
-    	else if (keyboard.down) {
-    		this.entity.y += this.speed;
-    		this.animateDirection('down', this.walkDownFrames);
-    	}
-    	else {
-    		this.entity.stop();
-    	}
-    	if (utils.outOfWorldBounds(this.entity, this.game.renderer)) {
-    		this.entity.x = origX;
-    		this.entity.y = origY;
-    	}
-    },
-    animateDirection: function(dir, frames) {
-    	if (!this.entity.playing || dir !== this.direction) {
-			this.entity.textures = frames;
-			if (dir == this.direction && this.entity.currentFrame + 1 !== this.entity.totalFrames) {
+	}
+
+	update () {
+		var keyboard = this.game.keyboard;
+		var origX = this.entity.x;
+		var origY = this.entity.y;
+		if (keyboard.left) {
+			this.entity.x -= this.speed;
+			this.entity.rotation = Math.PI * 0.5;
+			this.animateDirection('left');
+		}
+		else if (keyboard.right) {
+			this.entity.x += this.speed;
+			this.entity.rotation = Math.PI * 1.5;
+			this.animateDirection('right');
+		}
+		else if (keyboard.up) {
+			this.entity.y -= this.speed;
+			this.entity.rotation = Math.PI;
+			this.animateDirection('up');
+		}
+		else if (keyboard.down) {
+			this.entity.y += this.speed;
+			this.entity.rotation = 0;
+			this.animateDirection('down');
+		}
+		else {
+			this.entity.stop();
+			this.entity.textures = this.stopFrames;
+			this.entity.play();
+		}
+		if (utils.outOfWorldBounds(this.entity, this.game.renderer)) {
+			this.entity.x = origX;
+			this.entity.y = origY;
+		}
+	}
+	animateDirection (dir) {
+		if (!this.entity.playing) {
+			this.entity.textures = this.flyFrames;
+			if ( this.entity.currentFrame + 1 !== this.entity.totalFrames) {
 				this.entity.gotoAndPlay(this.entity.currentFrame);
 			}
 			else {
 				this.entity.gotoAndPlay(0);
 			}
-			this.direction = dir;
-    	}
-    }
-};
+		}
+	}
+}
 
 module.exports = Player;

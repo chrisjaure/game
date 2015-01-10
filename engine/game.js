@@ -11,6 +11,7 @@ class Game extends EventEmitter {
         this.height = height;
     }
     create () {
+        PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
         this.stage = new PIXI.Stage(0x000000);
         this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);

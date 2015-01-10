@@ -11,7 +11,6 @@ playScene.on('create', function () {
 }, playScene);
 playScene.on('active', function () {
     this.stage.visible = true;
-    console.log('here');
 }, playScene);
 
 module.exports = playScene;

@@ -3,7 +3,7 @@ var PIXI = require('pixi.js');
 exports.frameRange = function(start, end, prefix) {
     var frames = [];
     for (var i = start; i <= end; i++) {
-        frames.push(new PIXI.Texture.fromFrame(prefix + i));
+        frames.push(new PIXI.Texture.fromFrame((prefix || null) + i));
     }
     return frames;
 };
