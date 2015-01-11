@@ -19,10 +19,12 @@ class Player extends Entity {
 
 		var entity = this.entity = new PIXI.MovieClip(image.frames.slice(0, 1));
 		this.speed = 5;
-		entity.scale = { x: 1.5, y: 1.5 };
+		entity.scale = { x: 2, y: 2 };
 		entity.animationSpeed = 0.3;
 		entity.loop = false;
 		entity.anchor = { x: 0.5, y: 0.5 };
+		entity.x = 100;
+		entity.y = 100;
 
 		scene.stage.addChild(this.entity);
 // 		utils.showBoundingBox(this.entity);
@@ -61,8 +63,16 @@ class Player extends Entity {
 			this.entity.x = origX;
 			this.entity.y = origY;
 		}
+		if (keyboard.space) {
+			var time = Date.now();
+			if (time - this.lastShoot > 500 || !this.lastShoot) {
+				this.emit('shoot');
+				this.lastShoot = time;
+			}
+		}
 	}
 	animateDirection (dir) {
+		this.direction = dir;
 		if (!this.entity.playing) {
 			this.entity.textures = this.flyFrames;
 			if ( this.entity.currentFrame + 1 !== this.entity.totalFrames) {

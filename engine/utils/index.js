@@ -9,7 +9,8 @@ exports.frameRange = function(start, end, prefix) {
 };
 
 exports.outOfWorldBounds = function(object, bounds) {
-    return (object.x < 0 || object.y < 0 || object.x + object.width > bounds.width || object.y + object.height > bounds.height);
+    var objectBounds = object.getBounds();
+    return (objectBounds.x < 0 || objectBounds.y < 0 || objectBounds.x + objectBounds.width > bounds.width || objectBounds.y + objectBounds.height > bounds.height);
 };
 
 exports.setBoundingBox = function(object, opts) {

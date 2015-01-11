@@ -9,10 +9,10 @@ class Game extends EventEmitter {
         this.scenes = new Map();
         this.width = width;
         this.height = height;
+        PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
     }
     create () {
-        PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
-        this.stage = new PIXI.Stage(0x000000);
+        this.stage = new PIXI.Stage(0x1e1f33);
         this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);
 
@@ -20,7 +20,8 @@ class Game extends EventEmitter {
             '<left>': 'left',
             '<right>': 'right',
             '<up>': 'up',
-            '<down>': 'down'
+            '<down>': 'down',
+            '<space>': 'space'
         });
 
         this.scenes.forEach(scene => scene.create(this));

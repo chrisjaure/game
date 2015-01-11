@@ -1,6 +1,7 @@
 var PIXI = require('pixi.js');
+var EventEmitter = require('eventemitter3');
 
-class Entity {
+class Entity extends EventEmitter {
     constructor (entity, boundingBox) {
         this.entity = entity;
         if (boundingBox) {
