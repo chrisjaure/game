@@ -8,8 +8,8 @@ exports.frameRange = function(start, end, prefix) {
     return frames;
 };
 
-exports.outOfWorldBounds = function(object, bounds) {
-    var objectBounds = object.getBounds();
+exports.outOfWorldBounds = function(objectBounds, bounds) {
+    // console.log(objectBounds.x, objectBounds.y, objectBounds.x + objectBounds.width, objectBounds.y + objectBounds.height, bounds.width, bounds.height);
     return (objectBounds.x < 0 || objectBounds.y < 0 || objectBounds.x + objectBounds.width > bounds.width || objectBounds.y + objectBounds.height > bounds.height);
 };
 
@@ -24,17 +24,21 @@ exports.setBoundingBox = function(object, opts) {
     object.body = box;
 };
 
-exports.showBoundingBox = function(object) {
-    var box = new PIXI.Graphics();
-    box.beginFill(0xff0000);
-    box.alpha = 0.5;
+exports.showBoundingBox = function(object, color) {
+    var bounds = object.getBounds();
     if (!object.body) {
-        box.drawRect(0, 0, object.width, object.height);
+        let box = new PIXI.Graphics();
+        // box.beginFill(0xff0000);
+        box.lineStyle(2, color || 0xff0000, 1);
+        box.drawRect(0, 0, bounds.width, bounds.height);
+        // box.endFill();
+        box.alpha = 0.3;
+        box.scale = object.scale;
+        object.stage.addChild(box);
+        object.body = box;
     }
-    else {
-        box.drawRect(object.body.x, object.body.y, object.body.width, object.body.height);
-    }
-    object.addChild(box);
+    object.body.x = bounds.x;
+    object.body.y = bounds.y;
 };
 
 exports.ySort = function(children) {

@@ -18,10 +18,11 @@ playScene.on('active', function () {
 }, playScene);
 player.on('shoot', function () {
     if (player.direction) {
-        laser.shoot({ x: player.entity.x, y: player.entity.y }, player.direction);
+        let bounds = player.entity.getBounds();
+        bounds.x = bounds.x + 32;
+        bounds.y = bounds.y + 32;
+        laser.shoot(bounds, player.direction);
     }
 });
-
-window.laser = laser;
 
 module.exports = playScene;

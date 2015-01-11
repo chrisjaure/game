@@ -18,7 +18,6 @@ class Laser extends Entity {
     shoot (start, direction) {
         var laser = new PIXI.DisplayObjectContainer();
         laser.direction = direction;
-
         var hitAnimation = new PIXI.MovieClip(this.stopFrames);
         hitAnimation.loop = false;
         hitAnimation.animationSpeed = 0.4;
@@ -31,6 +30,7 @@ class Laser extends Entity {
         var box = new PIXI.Graphics();
         box.beginFill(0xff0000);
         box.drawRect(0, 0, 4, 10);
+        box.endFill();
         laser.addChild(box);
 
         laser.x = start.x;
@@ -62,7 +62,7 @@ class Laser extends Entity {
             }
             return true;
         }).forEach(laser => {
-            if (utils.outOfWorldBounds(laser, this.game.renderer)) {
+            if (utils.outOfWorldBounds(laser.getBounds(), this.game.renderer)) {
                 laser.children[0].visible = true;
                 laser.children[0].play();
                 laser.children[0].onComplete = function () {

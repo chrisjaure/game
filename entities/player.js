@@ -17,41 +17,44 @@ class Player extends Entity {
 		this.flyFrames = image.frames.slice(1, 5);
 		this.stopFrames = image.frames.slice(5, 12);
 
+		var container = this.container = new PIXI.DisplayObjectContainer();
+		container.pivot = { x: 16, y: 16 };
+		container.x = 150;
+		container.y = 150;
+
 		var entity = this.entity = new PIXI.MovieClip(image.frames.slice(0, 1));
-		this.speed = 5;
+		this.speed = 8;
 		entity.scale = { x: 2, y: 2 };
 		entity.animationSpeed = 0.3;
 		entity.loop = false;
-		entity.anchor = { x: 0.5, y: 0.5 };
-		entity.x = 100;
-		entity.y = 100;
+		entity.position = { x: -16, y: -16 };
 
-		scene.stage.addChild(this.entity);
-// 		utils.showBoundingBox(this.entity);
+		container.addChild(entity);
+
+		scene.stage.addChild(container);
 	}
 
 	update () {
 		var keyboard = this.game.keyboard;
-		var origX = this.entity.x;
-		var origY = this.entity.y;
+
 		if (keyboard.left) {
-			this.entity.x -= this.speed;
-			this.entity.rotation = Math.PI * 0.5;
+			this.container.x -= this.speed;
+			this.container.rotation = Math.PI * 0.5;
 			this.animateDirection('left');
 		}
 		else if (keyboard.right) {
-			this.entity.x += this.speed;
-			this.entity.rotation = Math.PI * 1.5;
+			this.container.x += this.speed;
+			this.container.rotation = Math.PI * 1.5;
 			this.animateDirection('right');
 		}
 		else if (keyboard.up) {
-			this.entity.y -= this.speed;
-			this.entity.rotation = Math.PI;
+			this.container.y -= this.speed;
+			this.container.rotation = Math.PI;
 			this.animateDirection('up');
 		}
 		else if (keyboard.down) {
-			this.entity.y += this.speed;
-			this.entity.rotation = 0;
+			this.container.y += this.speed;
+			this.container.rotation = 0;
 			this.animateDirection('down');
 		}
 		else {
@@ -59,10 +62,7 @@ class Player extends Entity {
 			this.entity.textures = this.stopFrames;
 			this.entity.play();
 		}
-		if (utils.outOfWorldBounds(this.entity, this.game.renderer)) {
-			this.entity.x = origX;
-			this.entity.y = origY;
-		}
+
 		if (keyboard.space) {
 			var time = Date.now();
 			if (time - this.lastShoot > 500 || !this.lastShoot) {
@@ -70,6 +70,12 @@ class Player extends Entity {
 				this.lastShoot = time;
 			}
 		}
+
+		if (utils.outOfWorldBounds(this.entity.getBounds(), this.game.renderer)) {
+			this.resetPosition();
+		}
+
+		utils.showBoundingBox(this.entity);
 	}
 	animateDirection (dir) {
 		this.direction = dir;
@@ -81,6 +87,21 @@ class Player extends Entity {
 			else {
 				this.entity.gotoAndPlay(0);
 			}
+		}
+	}
+	resetPosition () {
+		var bounds = this.entity.getBounds();
+		if (bounds.x < 0) {
+			this.container.x = bounds.width / 2;
+		}
+		if (bounds.y < 0) {
+			this.container.y = bounds.height / 2;
+		}
+		if (bounds.x + bounds.width > this.game.renderer.width) {
+			this.container.x = this.game.renderer.width - bounds.width / 2;
+		}
+		if (bounds.y + bounds.height > this.game.renderer.height) {
+			this.container.y = this.game.renderer.height - bounds.height / 2;
 		}
 	}
 }
