@@ -28,17 +28,15 @@ exports.showBoundingBox = function(object, color) {
     var bounds = object.getBounds();
     if (!object.body) {
         let box = new PIXI.Graphics();
-        // box.beginFill(0xff0000);
-        box.lineStyle(2, color || 0xff0000, 1);
-        box.drawRect(0, 0, bounds.width, bounds.height);
-        // box.endFill();
         box.alpha = 0.3;
-        box.scale = object.scale;
         object.stage.addChild(box);
         object.body = box;
     }
+    object.body.clear();
     object.body.x = bounds.x;
     object.body.y = bounds.y;
+    object.body.lineStyle(2, color || 0x00ff00, 1);
+    object.body.drawRect(0, 0, bounds.width, bounds.height);
 };
 
 exports.ySort = function(children) {

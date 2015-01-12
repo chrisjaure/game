@@ -18,7 +18,6 @@ class Player extends Entity {
 		this.stopFrames = image.frames.slice(5, 12);
 
 		var container = this.container = new PIXI.DisplayObjectContainer();
-		container.pivot = { x: 16, y: 16 };
 		container.x = 150;
 		container.y = 150;
 
@@ -27,9 +26,11 @@ class Player extends Entity {
 		entity.scale = { x: 2, y: 2 };
 		entity.animationSpeed = 0.3;
 		entity.loop = false;
-		entity.position = { x: -16, y: -16 };
 
 		container.addChild(entity);
+
+		var bounds = entity.getBounds();
+		container.pivot = { x: bounds.width, y: bounds.height };
 
 		scene.stage.addChild(container);
 	}
@@ -71,11 +72,11 @@ class Player extends Entity {
 			}
 		}
 
-		if (utils.outOfWorldBounds(this.entity.getBounds(), this.game.renderer)) {
-			this.resetPosition();
-		}
+		this.positionInWorld();
 
-		utils.showBoundingBox(this.entity);
+		if (this.game.debug) {
+			utils.showBoundingBox(this.container);
+		}
 	}
 	animateDirection (dir) {
 		this.direction = dir;
@@ -89,18 +90,18 @@ class Player extends Entity {
 			}
 		}
 	}
-	resetPosition () {
-		var bounds = this.entity.getBounds();
-		if (bounds.x < 0) {
+	positionInWorld () {
+		var bounds = this.container.getBounds();
+		if (this.container.x - this.container.pivot.x < 0) {
 			this.container.x = bounds.width / 2;
 		}
-		if (bounds.y < 0) {
+		if (this.container.y - this.container.pivot.y < 0) {
 			this.container.y = bounds.height / 2;
 		}
-		if (bounds.x + bounds.width > this.game.renderer.width) {
+		if (this.container.x - this.container.pivot.x + bounds.width > this.game.renderer.width) {
 			this.container.x = this.game.renderer.width - bounds.width / 2;
 		}
-		if (bounds.y + bounds.height > this.game.renderer.height) {
+		if (this.container.y - this.container.pivot.y + bounds.height > this.game.renderer.height) {
 			this.container.y = this.game.renderer.height - bounds.height / 2;
 		}
 	}

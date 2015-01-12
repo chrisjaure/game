@@ -12,5 +12,7 @@ game.addScene(play);
 start.on('inactive', function () {
     play.active = true;
 });
-
+game.debug = true;
 game.boot();
+
+window.game = game;

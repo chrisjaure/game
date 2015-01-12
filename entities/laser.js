@@ -35,7 +35,7 @@ class Laser extends Entity {
 
         laser.x = start.x;
         laser.y = start.y;
-        laser.anchor = { x: 0.5, y: 0.5 };
+        laser.pivot = { x: 2, y: 5 };
 
         switch (direction) {
             case 'left':
@@ -58,6 +58,9 @@ class Laser extends Entity {
         this.lasers.filter(laser => {
             if (laser.done) {
                 this.scene.stage.removeChild(laser);
+                if (laser.body && laser.body.stage) {
+                    laser.body.stage.removeChild(laser.body);
+                }
                 return false;
             }
             return true;
@@ -84,6 +87,9 @@ class Laser extends Entity {
                 case 'right':
                     laser.x += this.speed;
                     break;
+            }
+            if (this.game.debug) {
+                utils.showBoundingBox(laser);
             }
         });
     }
