@@ -3,33 +3,24 @@ var EventEmitter = require('eventemitter3');
 var active = Symbol('active');
 
 class Scene extends EventEmitter {
-    constructor (name) {
-        this.name = name;
-        this.entities = [];
-        this.stage = new PIXI.DisplayObjectContainer();
-    }
-    create (game) {
+    constructor (game) {
         this.game = game;
-        game.stage.addChild(this.stage);
-        this.entities.forEach(entity => {
-            if (entity.create) {
-                entity.create(this, game);
-            }
-        });
-        this.emit('create');
-        game.on('update', () => {
+        this.stage = new PIXI.DisplayObjectContainer();
+        game.on('create', this.create.bind(this));
+    }
+    create () {
+        this.game.stage.addChild(this.stage);
+        this.game.on('update', () => {
             if (this[active]) {
                 this.emit('update');
             }
         });
-        game.on('render', () => {
+        this.game.on('render', () => {
             if (this[active]) {
                 this.emit('render');
             }
-        })
-    }
-    addEntity (entity) {
-        this.entities.push(entity);
+        });
+        this.emit('create');
     }
     set active (value) {
         var event = (value) ? 'active' : 'inactive';

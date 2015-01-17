@@ -2,26 +2,23 @@ var PIXI = require('pixi.js');
 var EventEmitter = require('eventemitter3');
 
 class Entity extends EventEmitter {
-    constructor (entity, boundingBox) {
-        this.entity = entity;
-        if (boundingBox) {
-            this.setBoundingBox(boundingBox);
-        }
-    }
-    create (scene, game) {
+    constructor (scene, game) {
         this.scene = scene;
         this.game = game;
-    }
-    update () {}
-    setBoundingBox (opts) {
-        opts = opts || {};
-        var box = new PIXI.Rectangle(
-            opts.x || 0,
-            opts.y || 0,
-            opts.width || object.width,
-            opts.height || object.height
-        );
-        this.body = box;
+        if (this.assets) {
+            game.on('preload', assets => {
+                assets.push.apply(assets, this.assets);
+            });
+        }
+        if (this.create) {
+            scene.on('create', this.create.bind(this));
+        }
+        if (this.update) {
+            scene.on('update', this.update.bind(this));
+        }
+        if (this.render) {
+            scene.on('render', this.render.bind(this));
+        }
     }
 }
 

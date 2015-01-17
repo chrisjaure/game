@@ -6,7 +6,6 @@ var utils = require('./utils');
 
 class Game extends EventEmitter {
     constructor (width = 620, height = 400) {
-        this.scenes = new Map();
         this.width = width;
         this.height = height;
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
@@ -24,8 +23,6 @@ class Game extends EventEmitter {
             '<space>': 'space'
         });
 
-        this.scenes.forEach(scene => scene.create(this));
-
         this.ticker = ticker(window, 60)
             .on('tick', this.update.bind(this))
             .on('draw', this.render.bind(this));
@@ -35,15 +32,17 @@ class Game extends EventEmitter {
     preload (cb) {
         var assets = [];
         var loader;
-        this.scenes.forEach(scene => {
-            if (scene.entities) {
-                scene.entities.forEach(entity => {
-                    if (entity.assets) {
-                        assets = assets.concat(entity.assets);
-                    }
-                });
-            }
-        });
+        this.emit('preload', assets);
+        // this.scenes.forEach(scene => {
+        //     if (scene.entities) {
+        //         scene.entities.forEach(entity => {
+        //             if (entity.assets) {
+        //                 assets = assets.concat(entity.assets);
+        //             }
+        //         });
+        //     }
+        // });
+        console.log(assets);
         if (assets.length) {
             loader = new PIXI.AssetLoader(assets);
             loader.on('onComplete', cb);
@@ -66,9 +65,6 @@ class Game extends EventEmitter {
     render () {
         this.emit('render');
         this.renderer.render(this.stage);
-    }
-    addScene (scene) {
-        this.scenes.set(scene.name, scene);
     }
 }
 

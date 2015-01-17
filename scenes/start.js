@@ -2,8 +2,9 @@ var PIXI = require('pixi.js');
 var kb = require('kb-controls');
 var Scene = require('../engine/scene');
 
-var startScene = new Scene('start')
-    .on('create', function(){
+function startScene (game) {
+    var scene = new Scene(game);
+    scene.on('create', function(){
         var text = new PIXI.Text('Press space to start', {
             fill: 'white'
         });
@@ -11,15 +12,17 @@ var startScene = new Scene('start')
         this.keyboard = kb({
             '<space>': 'space'
         });
-    }, startScene)
+    }, scene)
     .on('update', function update() {
         if (this.active && this.keyboard.space) {
             this.active = false;
         }
-    }, startScene)
+    }, scene)
     .on('inactive', function () {
         this.stage.visible = false;
-    }, startScene);
-startScene.active = true;
+    }, scene);
+    scene.active = true;
+    return scene;
+}
 
 module.exports = startScene;

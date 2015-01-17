@@ -3,20 +3,18 @@ var Entity = require('../engine/entity');
 var utils = require('../engine/utils');
 
 class Laser extends Entity {
-    constructor () {
+    constructor (scene, game) {
         this.assets = ['assets/laser.png'];
         this.speed = 6;
         this.lasers = [];
+        super(scene, game);
     }
-    create (scene, game) {
-        super.create(scene, game);
-
+    create () {
         var image = new PIXI.ImageLoader(this.assets[0]);
         image.loadFramedSpriteSheet(14, 7, 'laser');
         this.stopFrames = image.frames;
-        scene.on('update', this.update.bind(this));
-        scene.on('render', () => {
-            if (game.debug) {
+        this.scene.on('render', () => {
+            if (this.game.debug) {
                 this.lasers.forEach((laser) => {
                     utils.showBoundingBox(laser);
                 });

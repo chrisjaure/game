@@ -1,13 +1,12 @@
 var Game = require('./engine/game');
 var Scene = require('./engine/scene');
 
-// scenes
-var start = require('./scenes/start');
-var play = require('./scenes/play');
-
+// new game
 var game = new Game();
-game.addScene(start);
-game.addScene(play);
+
+// scenes
+var start = require('./scenes/start')(game);
+var play = require('./scenes/play')(game);
 
 start.on('inactive', function () {
     play.active = true;

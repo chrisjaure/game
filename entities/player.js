@@ -4,13 +4,12 @@ var Entity = require('../engine/entity');
 var collide = require('box-collide');
 
 class Player extends Entity {
-	constructor () {
+	constructor (scene, game) {
 		this.assets = ['assets/ship.png'];
+		super(scene, game);
 	}
 
-	create (scene, game) {
-		super.create(scene, game);
-
+	create () {
 		var image = new PIXI.ImageLoader(this.assets[0]);
 		image.loadFramedSpriteSheet(32, 32, 'ship');
 
@@ -20,7 +19,7 @@ class Player extends Entity {
 		var container = this.container = new PIXI.DisplayObjectContainer();
 		container.x = 150;
 		container.y = 150;
-		container.rotation = Math.PI;
+		container.rotation = Math.PI * 1.5;
 
 		var entity = this.entity = new PIXI.MovieClip(this.flyFrames);
 		this.speed = 6;
@@ -28,17 +27,16 @@ class Player extends Entity {
 		entity.animationSpeed = 0.3;
 		entity.loop = true;
 		entity.play();
-		this.direction = 'up';
+		this.direction = 'right';
 
 		container.addChild(entity);
 
 		var bounds = entity.getBounds();
 		container.pivot = { x: bounds.width, y: bounds.height };
 
-		scene.stage.addChild(container);
+		this.scene.stage.addChild(container);
 
-		scene.on('update', this.update.bind(this));
-		scene.on('render', () => {
+		this.scene.on('render', () => {
 			if (this.game.debug) {
 				utils.showBoundingBox(this.container);
 			}
