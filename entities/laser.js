@@ -14,6 +14,14 @@ class Laser extends Entity {
         var image = new PIXI.ImageLoader(this.assets[0]);
         image.loadFramedSpriteSheet(14, 7, 'laser');
         this.stopFrames = image.frames;
+        scene.on('update', this.update.bind(this));
+        scene.on('render', () => {
+            if (game.debug) {
+                this.lasers.forEach((laser) => {
+                    utils.showBoundingBox(laser);
+                });
+            }
+        });
     }
     shoot (start, direction) {
         var laser = new PIXI.DisplayObjectContainer();
@@ -65,7 +73,13 @@ class Laser extends Entity {
             }
             return true;
         }).forEach(laser => {
-            if (utils.outOfWorldBounds(laser.getBounds(), this.game.renderer)) {
+            var bounds = {
+                x: laser.x - laser.pivot.x,
+                y: laser.y - laser.pivot.y,
+                width: laser.width,
+                height: laser.height
+            };
+            if (utils.outOfWorldBounds(bounds, this.game.renderer)) {
                 laser.children[0].visible = true;
                 laser.children[0].play();
                 laser.children[0].onComplete = function () {
@@ -87,9 +101,6 @@ class Laser extends Entity {
                 case 'right':
                     laser.x += this.speed;
                     break;
-            }
-            if (this.game.debug) {
-                utils.showBoundingBox(laser);
             }
         });
     }

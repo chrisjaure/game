@@ -61,16 +61,11 @@ class Game extends EventEmitter {
         }.bind(this));
     }
     update () {
-        this.scenes.forEach(scene => {
-            if (scene.active && scene.update) {
-                scene.update(this);
-            }
-        });
         this.emit('update');
     }
     render () {
-        this.renderer.render(this.stage);
         this.emit('render');
+        this.renderer.render(this.stage);
     }
     addScene (scene) {
         this.scenes.set(scene.name, scene);

@@ -17,14 +17,16 @@ class Scene extends EventEmitter {
             }
         });
         this.emit('create');
-    }
-    update () {
-        this.entities.forEach(entity => {
-            if (entity.update) {
-                entity.update(this);
+        game.on('update', () => {
+            if (this[active]) {
+                this.emit('update');
             }
         });
-        this.emit('update');
+        game.on('render', () => {
+            if (this[active]) {
+                this.emit('render');
+            }
+        })
     }
     addEntity (entity) {
         this.entities.push(entity);

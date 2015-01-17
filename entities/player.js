@@ -20,12 +20,15 @@ class Player extends Entity {
 		var container = this.container = new PIXI.DisplayObjectContainer();
 		container.x = 150;
 		container.y = 150;
+		container.rotation = Math.PI;
 
-		var entity = this.entity = new PIXI.MovieClip(image.frames.slice(0, 1));
-		this.speed = 8;
+		var entity = this.entity = new PIXI.MovieClip(this.flyFrames);
+		this.speed = 6;
 		entity.scale = { x: 2, y: 2 };
 		entity.animationSpeed = 0.3;
-		entity.loop = false;
+		entity.loop = true;
+		entity.play();
+		this.direction = 'up';
 
 		container.addChild(entity);
 
@@ -33,6 +36,13 @@ class Player extends Entity {
 		container.pivot = { x: bounds.width, y: bounds.height };
 
 		scene.stage.addChild(container);
+
+		scene.on('update', this.update.bind(this));
+		scene.on('render', () => {
+			if (this.game.debug) {
+				utils.showBoundingBox(this.container);
+			}
+		});
 	}
 
 	update () {
@@ -40,28 +50,28 @@ class Player extends Entity {
 
 		if (keyboard.left) {
 			this.container.x -= this.speed;
-			this.container.rotation = Math.PI * 0.5;
-			this.animateDirection('left');
+			// this.container.rotation = Math.PI * 0.5;
+			// this.animateDirection('left');
 		}
 		else if (keyboard.right) {
 			this.container.x += this.speed;
-			this.container.rotation = Math.PI * 1.5;
-			this.animateDirection('right');
+			// this.container.rotation = Math.PI * 1.5;
+			// this.animateDirection('right');
 		}
 		else if (keyboard.up) {
 			this.container.y -= this.speed;
-			this.container.rotation = Math.PI;
-			this.animateDirection('up');
+			// this.container.rotation = Math.PI;
+			// this.animateDirection('up');
 		}
 		else if (keyboard.down) {
 			this.container.y += this.speed;
-			this.container.rotation = 0;
-			this.animateDirection('down');
+			// this.container.rotation = 0;
+			// this.animateDirection('down');
 		}
 		else {
-			this.entity.stop();
-			this.entity.textures = this.stopFrames;
-			this.entity.play();
+			// this.entity.stop();
+			// this.entity.textures = this.stopFrames;
+			// this.entity.play();
 		}
 
 		if (keyboard.space) {
@@ -73,10 +83,6 @@ class Player extends Entity {
 		}
 
 		this.positionInWorld();
-
-		if (this.game.debug) {
-			utils.showBoundingBox(this.container);
-		}
 	}
 	animateDirection (dir) {
 		this.direction = dir;
