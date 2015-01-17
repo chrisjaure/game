@@ -5,23 +5,19 @@ var Laser = require('../entities/laser');
 
 function playScene (game) {
 	var scene = new Scene(game);
-	var player = new Player(scene, game);
+	var player = new Player(scene, game, {
+		x: game.renderer.width / 2,
+		y: game.renderer.height / 2
+	});
 	var laser = new Laser(scene, game);
 
 	scene.active = false;
-	scene.on('create', function () {
-	    this.stage.visible = false;
-	}, scene);
+    scene.stage.visible = false;
 	scene.on('active', function () {
-	    this.stage.visible = true;
-	}, scene);
+	    scene.stage.visible = true;
+	});
 	player.on('shoot', function () {
-	    if (player.direction) {
-	        let bounds = player.entity.getBounds();
-	        bounds.x = bounds.x + 32;
-	        bounds.y = bounds.y + 32;
-	        laser.shoot(bounds, player.direction);
-	    }
+        laser.shoot(player.getGunPosition(), player.direction);
 	});
 
 	return scene;

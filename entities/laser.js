@@ -40,7 +40,7 @@ class Laser extends Entity {
         laser.addChild(box);
 
         laser.x = start.x;
-        laser.y = start.y;
+        laser.y = start.y + 1;
         laser.pivot = { x: 2, y: 5 };
 
         switch (direction) {

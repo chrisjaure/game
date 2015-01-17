@@ -9,8 +9,7 @@ class Game extends EventEmitter {
         this.width = width;
         this.height = height;
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
-    }
-    create () {
+
         this.stage = new PIXI.Stage(0x1e1f33);
         this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);
@@ -26,23 +25,11 @@ class Game extends EventEmitter {
         this.ticker = ticker(window, 60)
             .on('tick', this.update.bind(this))
             .on('draw', this.render.bind(this));
-
-        this.emit('create');
     }
     preload (cb) {
         var assets = [];
         var loader;
         this.emit('preload', assets);
-        // this.scenes.forEach(scene => {
-        //     if (scene.entities) {
-        //         scene.entities.forEach(entity => {
-        //             if (entity.assets) {
-        //                 assets = assets.concat(entity.assets);
-        //             }
-        //         });
-        //     }
-        // });
-        console.log(assets);
         if (assets.length) {
             loader = new PIXI.AssetLoader(assets);
             loader.on('onComplete', cb);
@@ -55,7 +42,7 @@ class Game extends EventEmitter {
     boot (cb) {
         cb = cb || function(){};
         this.preload(function(){
-            this.create();
+            this.emit('create');
             cb();
         }.bind(this));
     }

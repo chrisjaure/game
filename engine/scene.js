@@ -6,20 +6,20 @@ class Scene extends EventEmitter {
     constructor (game) {
         this.game = game;
         this.stage = new PIXI.DisplayObjectContainer();
-        game.on('create', this.create.bind(this));
-    }
-    create () {
-        this.game.stage.addChild(this.stage);
-        this.game.on('update', () => {
+        game.stage.addChild(this.stage);
+        game.on('update', () => {
             if (this[active]) {
                 this.emit('update');
             }
         });
-        this.game.on('render', () => {
+        game.on('render', () => {
             if (this[active]) {
                 this.emit('render');
             }
         });
+        game.on('create', this.create.bind(this));
+    }
+    create () {
         this.emit('create');
     }
     set active (value) {

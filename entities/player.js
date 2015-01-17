@@ -4,9 +4,9 @@ var Entity = require('../engine/entity');
 var collide = require('box-collide');
 
 class Player extends Entity {
-	constructor (scene, game) {
+	constructor (scene, game, options) {
 		this.assets = ['assets/ship.png'];
-		super(scene, game);
+		super(...arguments);
 	}
 
 	create () {
@@ -17,8 +17,8 @@ class Player extends Entity {
 		this.stopFrames = image.frames.slice(5, 12);
 
 		var container = this.container = new PIXI.DisplayObjectContainer();
-		container.x = 150;
-		container.y = 150;
+		container.x = this.options.x || 0;
+		container.y = this.options.y || 0;
 		container.rotation = Math.PI * 1.5;
 
 		var entity = this.entity = new PIXI.MovieClip(this.flyFrames);
@@ -108,6 +108,12 @@ class Player extends Entity {
 		if (this.container.y - this.container.pivot.y + bounds.height > this.game.renderer.height) {
 			this.container.y = this.game.renderer.height - bounds.height / 2;
 		}
+	}
+	getGunPosition () {
+		let bounds = this.entity.getBounds();
+        bounds.x = bounds.x + bounds.width;
+        bounds.y = bounds.y + bounds.width / 2 - 2;
+        return bounds;
 	}
 }
 
