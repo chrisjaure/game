@@ -24,7 +24,7 @@ class Player extends Entity {
 
 		var sprite = this.sprite = new PIXI.MovieClip(this.flyFrames);
 		this.speed = 6;
-		sprite.animationSpeed = 0.1;
+		sprite.animationSpeed = 2 / 60;
 		sprite.loop = true;
 		sprite.play();
 		sprite.rotation = Math.PI * 1.5;
@@ -76,10 +76,12 @@ class Player extends Entity {
 		}
 	}
 	getGunPosition () {
-		let bounds = this.sprite.getBounds();
-        bounds.x = bounds.x + bounds.width;
-        bounds.y = bounds.y + bounds.width / 2 - 2;
-        return bounds;
+        return {
+        	x: this.entity.x + this.entity.width,
+        	y: this.entity.y + this.entity.height / 2 - 2,
+        	width: this.entity.width,
+        	height: this.entity.height
+        };
 	}
 }
 
