@@ -6,6 +6,12 @@ var Rock = require('../entities/rock');
 var boxCollide = require('box-collide');
 
 function collide (collection1, collection2, cb) {
+	if (!Array.isArray(collection1)) {
+		collection1 = [collection1];
+	}
+	if (!Array.isArray(collection2)) {
+		collection2 = [collection2];
+	}
 	collection1.forEach(item1 => {
 		collection2.forEach(item2 => {
 			if (boxCollide(item1.entity, item2.entity)) {
@@ -43,6 +49,9 @@ function playScene (game) {
 			collide(rocks, lasers, function(rock, laser) {
 				rock.removeFromScene();
 				laser.removeFromScene();
+			});
+			collide(player, rocks, function(player, rock) {
+				rock.removeFromScene();
 			});
 		});
 		player.addToScene(scene);
