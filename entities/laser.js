@@ -57,9 +57,6 @@ class Laser extends Entity {
             height: this.entity.height
         };
         if (this.remove) {
-            if (this.entity.body && this.entity.body.stage) {
-                this.entity.body.stage.removeChild(this.entity.body);
-            }
             this.removeFromScene();
             return;
         }
@@ -87,6 +84,11 @@ class Laser extends Entity {
             case 'right':
                 this.entity.x += this.speed;
                 break;
+        }
+    }
+    render () {
+        if (this.game.debug) {
+            utils.showBoundingBox(this.entity);
         }
     }
 }

@@ -25,7 +25,6 @@ exports.setBoundingBox = function(object, opts) {
 };
 
 exports.showBoundingBox = function(object, color) {
-    var bounds = object.getBounds();
     if (!object.stage) {
         return;
     }
@@ -36,10 +35,10 @@ exports.showBoundingBox = function(object, color) {
         object.body = box;
     }
     object.body.clear();
-    object.body.x = bounds.x;
-    object.body.y = bounds.y;
+    object.body.x = object.x;
+    object.body.y = object.y;
     object.body.lineStyle(2, color || 0x00ff00, 1);
-    object.body.drawRect(0, 0, bounds.width, bounds.height);
+    object.body.drawRect(0, 0, object.width, object.height);
 };
 
 exports.ySort = function(children) {

@@ -19,6 +19,9 @@ class Entity extends EventEmitter {
     }
     removeFromScene () {
         this.scene.stage.removeChild(this.entity);
+        if (this.entity.body) {
+            this.entity.body.stage.removeChild(this.entity.body);
+        }
         if (this.update) {
             this.scene.removeListener('update', this.boundUpdate);
         }
@@ -26,6 +29,16 @@ class Entity extends EventEmitter {
             this.scene.removeListener('render', this.render);
         }
         this.scene = null;
+        this.removed = true;
+    }
+    getBoundingBox () {
+        let bounds = {
+            // x. 
+        }
+        object.body.x = object.x;
+        object.body.y = object.y;
+        object.body.pivot = object.pivot;
+        object.body.rotation = object.rotation;
     }
 }
 
