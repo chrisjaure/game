@@ -6,6 +6,7 @@ var utils = require('./utils');
 
 class Game extends EventEmitter {
     constructor (width = 620, height = 400) {
+        this.PIXI = PIXI;
         this.width = width;
         this.height = height;
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
@@ -21,10 +22,6 @@ class Game extends EventEmitter {
             '<down>': 'down',
             '<space>': 'space'
         });
-
-        this.ticker = ticker(window, 60)
-            .on('tick', this.update.bind(this))
-            .on('draw', this.render.bind(this));
     }
     preload (cb) {
         var assets = [];
@@ -42,7 +39,10 @@ class Game extends EventEmitter {
     boot (cb) {
         cb = cb || function(){};
         this.preload(function(){
-            this.emit('create');
+            this.emit('load');
+            this.ticker = ticker(window, 60)
+                .on('tick', this.update.bind(this))
+                .on('draw', this.render.bind(this));
             cb();
         }.bind(this));
     }

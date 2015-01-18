@@ -26,6 +26,9 @@ exports.setBoundingBox = function(object, opts) {
 
 exports.showBoundingBox = function(object, color) {
     var bounds = object.getBounds();
+    if (!object.stage) {
+        return;
+    }
     if (!object.body) {
         let box = new PIXI.Graphics();
         box.alpha = 0.3;

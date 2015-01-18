@@ -12,7 +12,7 @@ class Entity extends EventEmitter {
             });
         }
         if (this.create) {
-            scene.on('create', this.create.bind(this));
+            game.on('load', this.create.bind(this));
         }
         if (this.update) {
             scene.on('update', this.update.bind(this));
@@ -20,6 +20,9 @@ class Entity extends EventEmitter {
         if (this.render) {
             scene.on('render', this.render.bind(this));
         }
+    }
+    addToScene () {
+        this.scene.stage.addChild(this.entity);
     }
 }
 

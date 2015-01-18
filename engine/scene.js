@@ -17,10 +17,6 @@ class Scene extends EventEmitter {
                 this.emit('render');
             }
         });
-        game.on('create', this.create.bind(this));
-    }
-    create () {
-        this.emit('create');
     }
     set active (value) {
         var event = (value) ? 'active' : 'inactive';
