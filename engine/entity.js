@@ -2,27 +2,30 @@ var PIXI = require('pixi.js');
 var EventEmitter = require('eventemitter3');
 
 class Entity extends EventEmitter {
-    constructor (scene, game, options) {
-        this.scene = scene;
+    constructor (game, options) {
         this.game = game;
         this.options = options;
-        if (this.assets) {
-            game.on('preload', assets => {
-                assets.push.apply(assets, this.assets);
-            });
-        }
-        if (this.create) {
-            game.on('load', this.create.bind(this));
-        }
+    }
+    addToScene (scene) {
+        scene.stage.addChild(this.entity);
         if (this.update) {
-            scene.on('update', this.update.bind(this));
+            this.boundUpdate = this.update.bind(this);
+            scene.on('update', this.boundUpdate);
         }
         if (this.render) {
             scene.on('render', this.render.bind(this));
         }
+        this.scene = scene;
     }
-    addToScene () {
-        this.scene.stage.addChild(this.entity);
+    removeFromScene () {
+        this.scene.stage.removeChild(this.entity);
+        if (this.update) {
+            this.scene.removeListener('update', this.boundUpdate);
+        }
+        if (this.render) {
+            this.scene.removeListener('render', this.render);
+        }
+        this.scene = null;
     }
 }
 

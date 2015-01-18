@@ -3,27 +3,19 @@ var Entity = require('../engine/entity');
 var utils = require('../engine/utils');
 
 class Laser extends Entity {
-    constructor (scene, game) {
+    static preload (game) {
+        game.on('preload', assets => assets.push('assets/laser.png'));
+    }
+    constructor (game, options) {
+        super(...arguments);
         this.assets = ['assets/laser.png'];
         this.speed = 6;
-        this.lasers = [];
-        super(scene, game);
-    }
-    create () {
         var image = new PIXI.ImageLoader(this.assets[0]);
         image.loadFramedSpriteSheet(14, 7, 'laser');
         this.stopFrames = image.frames;
-        this.scene.on('render', () => {
-            if (this.game.debug) {
-                this.lasers.forEach((laser) => {
-                    utils.showBoundingBox(laser);
-                });
-            }
-        });
-    }
-    shoot (start, direction) {
-        var laser = new PIXI.DisplayObjectContainer();
-        laser.direction = direction;
+
+        var laser = this.entity = new PIXI.DisplayObjectContainer();
+        laser.direction = this.options.direction || 'right';
         var hitAnimation = new PIXI.MovieClip(this.stopFrames);
         hitAnimation.loop = false;
         hitAnimation.animationSpeed = 0.4;
@@ -39,11 +31,11 @@ class Laser extends Entity {
         box.endFill();
         laser.addChild(box);
 
-        laser.x = start.x;
-        laser.y = start.y + 1;
+        laser.x = this.options.x;
+        laser.y = this.options.y + 1;
         laser.pivot = { x: 2, y: 5 };
 
-        switch (direction) {
+        switch (laser.direction) {
             case 'left':
                 laser.rotation = Math.PI * 0.5;
                 break;
@@ -56,51 +48,46 @@ class Laser extends Entity {
         }
 
         laser.addChild(box);
-
-        this.scene.stage.addChild(laser);
-        this.lasers.push(laser);
     }
     update () {
-        this.lasers.filter(laser => {
-            if (laser.done) {
-                this.scene.stage.removeChild(laser);
-                if (laser.body && laser.body.stage) {
-                    laser.body.stage.removeChild(laser.body);
-                }
-                return false;
+        var bounds = {
+            x: this.entity.x - this.entity.pivot.x,
+            y: this.entity.y - this.entity.pivot.y,
+            width: this.entity.width,
+            height: this.entity.height
+        };
+        if (this.remove) {
+            if (this.entity.body && this.entity.body.stage) {
+                this.entity.body.stage.removeChild(this.entity.body);
             }
-            return true;
-        }).forEach(laser => {
-            var bounds = {
-                x: laser.x - laser.pivot.x,
-                y: laser.y - laser.pivot.y,
-                width: laser.width,
-                height: laser.height
-            };
-            if (utils.outOfWorldBounds(bounds, this.game.renderer)) {
-                laser.children[0].visible = true;
-                laser.children[0].play();
-                laser.children[0].onComplete = function () {
-                    laser.done = true;
-                };
-                laser.children[1].visible = false;
-                return;
-            }
-            switch (laser.direction) {
-                case 'up':
-                    laser.y -= this.speed;
-                    break;
-                case 'down':
-                    laser.y += this.speed;
-                    break;
-                case 'left':
-                    laser.x -= this.speed;
-                    break;
-                case 'right':
-                    laser.x += this.speed;
-                    break;
-            }
-        });
+            this.removeFromScene();
+            return;
+        }
+        if (this.removing) {
+            return;
+        }
+        if (utils.outOfWorldBounds(bounds, this.game.renderer)) {
+            this.entity.children[0].visible = true;
+            this.entity.children[0].play();
+            this.entity.children[0].onComplete = ( () => this.remove = true );
+            this.entity.children[1].visible = false;
+            this.removing = true;
+            return;
+        }
+        switch (this.entity.direction) {
+            case 'up':
+                this.entity.y -= this.speed;
+                break;
+            case 'down':
+                this.entity.y += this.speed;
+                break;
+            case 'left':
+                this.entity.x -= this.speed;
+                break;
+            case 'right':
+                this.entity.x += this.speed;
+                break;
+        }
     }
 }
 

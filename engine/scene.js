@@ -1,5 +1,5 @@
 var PIXI = require('pixi.js');
-var EventEmitter = require('eventemitter3');
+var EventEmitter = require('eventemitter3').EventEmitter;
 var active = Symbol('active');
 
 class Scene extends EventEmitter {

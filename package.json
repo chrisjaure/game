@@ -23,6 +23,7 @@
     "kb-controls": "^0.2.0",
     "mousetrap": "^1.4.6",
     "pixi.js": "^2.2.0",
+    "stats-js": "^1.0.0-alpha1",
     "ticker": "^0.1.0"
   },
   "devDependencies": {

@@ -4,12 +4,13 @@ var Entity = require('../engine/entity');
 var collide = require('box-collide');
 
 class Player extends Entity {
-	constructor (scene, game, options) {
-		this.assets = ['assets/ship.png'];
+	static preload (game) {
+        game.on('preload', assets => assets.push('assets/ship.png'));
+    }
+	constructor () {
 		super(...arguments);
-	}
-
-	create () {
+		this.assets = ['assets/ship.png'];
+		
 		var image = new PIXI.ImageLoader(this.assets[0]);
 		image.loadFramedSpriteSheet(32, 32, 'ship');
 
@@ -33,12 +34,6 @@ class Player extends Entity {
 
 		var bounds = sprite.getBounds();
 		entity.pivot = { x: bounds.width, y: bounds.height };
-
-		this.scene.on('render', () => {
-			if (this.game.debug) {
-				utils.showBoundingBox(this.entity);
-			}
-		});
 	}
 
 	update () {
