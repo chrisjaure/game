@@ -18,11 +18,6 @@ class Rock extends Entity {
 		this.entity.y += this.speed;
 		this.entity.x += this.speed;
 	}
-	render () {
-		if (this.game.debug) {
-			utils.showBoundingBox(this.entity);
-		}
-	}
 }
 
 module.exports = Rock;

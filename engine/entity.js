@@ -1,5 +1,6 @@
 var PIXI = require('pixi.js');
 var EventEmitter = require('eventemitter3');
+var utils = require('./utils');
 
 class Entity extends EventEmitter {
     constructor (game, options) {
@@ -18,6 +19,9 @@ class Entity extends EventEmitter {
         this.scene = scene;
     }
     removeFromScene () {
+        if (!this.scene) {
+            return;
+        }
         this.scene.stage.removeChild(this.entity);
         if (this.entity.body) {
             this.entity.body.stage.removeChild(this.entity.body);
@@ -39,6 +43,11 @@ class Entity extends EventEmitter {
         object.body.y = object.y;
         object.body.pivot = object.pivot;
         object.body.rotation = object.rotation;
+    }
+    render () {
+        if (this.game.debug) {
+            utils.showBoundingBox(this.entity);
+        }
     }
 }
 

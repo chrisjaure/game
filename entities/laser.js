@@ -28,11 +28,6 @@ class Laser extends Entity {
         }
         this.entity.x += this.speed;
     }
-    render () {
-        if (this.game.debug) {
-            utils.showBoundingBox(this.entity);
-        }
-    }
 }
 
 module.exports = Laser;

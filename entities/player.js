@@ -10,7 +10,7 @@ class Player extends Entity {
 	constructor () {
 		super(...arguments);
 		this.assets = ['assets/ship.png'];
-		
+
 		var image = new PIXI.ImageLoader(this.assets[0]);
 		image.loadFramedSpriteSheet(32, 32, 'ship');
 
@@ -20,20 +20,19 @@ class Player extends Entity {
 		var entity = this.entity = new PIXI.DisplayObjectContainer();
 		entity.x = this.options.x || 0;
 		entity.y = this.options.y || 0;
-		entity.rotation = Math.PI * 1.5;
+		entity.scale = { x: 2, y: 2 };
 
 		var sprite = this.sprite = new PIXI.MovieClip(this.flyFrames);
 		this.speed = 6;
-		sprite.scale = { x: 2, y: 2 };
-		sprite.animationSpeed = 0.3;
+		sprite.animationSpeed = 0.1;
 		sprite.loop = true;
 		sprite.play();
-		this.direction = 'right';
+		sprite.rotation = Math.PI * 1.5;
+		sprite.position.y = sprite.height;
 
 		entity.addChild(sprite);
 
 		var bounds = sprite.getBounds();
-		entity.pivot = { x: bounds.width, y: bounds.height };
 	}
 
 	update () {
@@ -63,18 +62,17 @@ class Player extends Entity {
 		this.positionInBounds();
 	}
 	positionInBounds () {
-		var bounds = this.entity.getBounds();
-		if (this.entity.x - this.entity.pivot.x < 0) {
-			this.entity.x = bounds.width / 2;
+		if (this.entity.x < 0) {
+			this.entity.x = 0;
 		}
-		if (this.entity.y - this.entity.pivot.y < 0) {
-			this.entity.y = bounds.height / 2;
+		if (this.entity.y < 0) {
+			this.entity.y = 0;
 		}
-		if (this.entity.x - this.entity.pivot.x + bounds.width > this.game.renderer.width) {
-			this.entity.x = this.game.renderer.width - bounds.width / 2;
+		if (this.entity.x + this.entity.width > this.game.renderer.width) {
+			this.entity.x = this.game.renderer.width - this.entity.width;
 		}
-		if (this.entity.y - this.entity.pivot.y + bounds.height > this.game.renderer.height) {
-			this.entity.y = this.game.renderer.height - bounds.height / 2;
+		if (this.entity.y + this.entity.height > this.game.renderer.height) {
+			this.entity.y = this.game.renderer.height - this.entity.height;
 		}
 	}
 	getGunPosition () {
