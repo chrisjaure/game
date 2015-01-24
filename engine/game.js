@@ -18,9 +18,13 @@ class Game extends EventEmitter {
 
         this.keyboard = kb({
             '<left>': 'left',
+            'A': 'left',
             '<right>': 'right',
+            'D': 'right',
             '<up>': 'up',
+            'W': 'up',
             '<down>': 'down',
+            'S': 'down',
             '<space>': 'space'
         });
     }

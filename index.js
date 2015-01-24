@@ -22,7 +22,7 @@ win.on('inactive', function(){
 	play.active = true;
     background.active = true;
 });
-game.debug = true;
+// game.debug = true;
 game.boot();
 
-window.game = game;
+// window.game = game;

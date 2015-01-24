@@ -2,6 +2,7 @@ var PIXI = require('pixi.js');
 var utils = require('../engine/utils');
 var Entity = require('../engine/entity');
 var collide = require('box-collide');
+var Howl = require('howler').Howl;
 
 class Player extends Entity {
 	static preload (game) {
@@ -32,7 +33,7 @@ class Player extends Entity {
 
 		entity.addChild(sprite);
 
-		var bounds = sprite.getBounds();
+		this.shineGetSound = new Howl({ urls: ['assets/shineget.wav'], volume: 0.6 });
 	}
 	reset () {
 		this.speed = 6;
@@ -41,6 +42,7 @@ class Player extends Entity {
 	}
 	shineGet () {
 		this.speed -= 0.1;
+		this.shineGetSound.play();
 	}
 	update () {
 		var keyboard = this.game.keyboard;

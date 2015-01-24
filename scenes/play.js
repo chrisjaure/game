@@ -1,13 +1,14 @@
 var PIXI = require('pixi.js');
+var Howl = require('howler').Howl;
 var Scene = require('../engine/scene');
 var Player = require('../entities/player');
 var Laser = require('../entities/laser');
 var Rock = require('../entities/rock');
 var utils = require('../engine/utils');
 
-
 function playScene (game) {
 	var scene = new Scene(game);
+	var bgMusic = new Howl({ urls: ['assets/gurdonark_-_Relief.mp3'], volume: 0.5 });
 	Player.preload(game);
 	Laser.preload(game);
 	game.on('load', function() {
@@ -26,6 +27,10 @@ function playScene (game) {
 			player.reset();
 			rocks.forEach(rock => rock.removeFromScene());
 			rocks = [];
+			bgMusic.play();
+		});
+		scene.on('inactive', function() {
+			// bgMusic.stop();
 		});
 		scene.on('update', function(time){
 			if (time % 52 === 0) {
@@ -37,7 +42,7 @@ function playScene (game) {
 			lasers = lasers.filter(laser => !laser.removed);
 			utils.collide(player, rocks, function(player, rock) {
 				rock.removeFromScene();
-				scene.stage.alpha -= 0.05;
+				scene.stage.alpha -= 0.03;
 				player.shineGet();
 				if (scene.stage.alpha < 0) {
 					scene.emit('win');
