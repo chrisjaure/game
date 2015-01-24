@@ -27,7 +27,7 @@ function playScene (game) {
 	Laser.preload(game);
 	game.on('load', function() {
 		var player = new Player(game, {
-			x: game.renderer.width / 4,
+			x: game.renderer.width / 6,
 			y: game.renderer.height / 2
 		});
 		var rocks = [];
@@ -37,6 +37,10 @@ function playScene (game) {
 		scene.stage.visible = false;
 		scene.on('active', function () {
 			scene.stage.visible = true;
+			scene.stage.alpha = 1;
+			player.reset();
+			rocks.forEach(rock => rock.removeFromScene());
+			rocks = [];
 		});
 		scene.on('update', function(time){
 			if (time % 52 === 0) {
@@ -46,12 +50,17 @@ function playScene (game) {
 			}
 			rocks = rocks.filter(rock => !rock.removed);
 			lasers = lasers.filter(laser => !laser.removed);
-			collide(rocks, lasers, function(rock, laser) {
-				rock.removeFromScene();
-				laser.removeFromScene();
-			});
+			// collide(rocks, lasers, function(rock, laser) {
+			// 	rock.removeFromScene();
+			// 	laser.removeFromScene();
+			// });
 			collide(player, rocks, function(player, rock) {
 				rock.removeFromScene();
+				scene.stage.alpha -= 0.05;
+				player.shineGet();
+				if (scene.stage.alpha < 0) {
+					scene.emit('win');
+				}
 			});
 		});
 		player.addToScene(scene);

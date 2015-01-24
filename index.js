@@ -1,5 +1,4 @@
 var Game = require('./engine/game');
-var Scene = require('./engine/scene');
 
 // new game
 var game = new Game();
@@ -8,9 +7,19 @@ var game = new Game();
 var start = require('./scenes/start')(game);
 var background = require('./scenes/background')(game);
 var play = require('./scenes/play')(game);
+var win = require('./scenes/win')(game);
 
 start.on('inactive', function () {
     play.active = true;
+    background.active = true;
+});
+play.on('win', function() {
+	play.active = false;
+	background.active = false;
+	win.active = true;
+});
+win.on('inactive', function(){
+	play.active = true;
     background.active = true;
 });
 game.debug = true;

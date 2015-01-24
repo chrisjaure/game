@@ -10,6 +10,7 @@ class Player extends Entity {
 	constructor () {
 		super(...arguments);
 		this.assets = ['assets/ship.png'];
+		this.speed = 6;
 
 		var image = new PIXI.ImageLoader(this.assets[0]);
 		image.loadFramedSpriteSheet(32, 32, 'ship');
@@ -23,7 +24,6 @@ class Player extends Entity {
 		entity.scale = { x: 2, y: 2 };
 
 		var sprite = this.sprite = new PIXI.MovieClip(this.flyFrames);
-		this.speed = 6;
 		sprite.animationSpeed = 2 / 60;
 		sprite.loop = true;
 		sprite.play();
@@ -34,7 +34,14 @@ class Player extends Entity {
 
 		var bounds = sprite.getBounds();
 	}
-
+	reset () {
+		this.speed = 6;
+		this.entity.x = this.options.x || 0;
+		this.entity.y = this.options.y || 0;
+	}
+	shineGet () {
+		this.speed -= 0.1;
+	}
 	update () {
 		var keyboard = this.game.keyboard;
 
@@ -51,13 +58,13 @@ class Player extends Entity {
 			this.entity.y += this.speed;
 		}
 
-		if (keyboard.space) {
-			var time = Date.now();
-			if (time - this.lastShoot > 500 || !this.lastShoot) {
-				this.emit('shoot');
-				this.lastShoot = time;
-			}
-		}
+		// if (keyboard.space) {
+		// 	var time = Date.now();
+		// 	if (time - this.lastShoot > 500 || !this.lastShoot) {
+		// 		this.emit('shoot');
+		// 		this.lastShoot = time;
+		// 	}
+		// }
 
 		this.positionInBounds();
 	}

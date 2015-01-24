@@ -1,10 +1,9 @@
 var PIXI = require('pixi.js');
-var kb = require('kb-controls');
 var Scene = require('../engine/scene');
 
-function startScene (game) {
+function winScene (game) {
     var scene = new Scene(game);
-    var text = new PIXI.Text('Press space to start', {
+    var text = new PIXI.Text('You Win!!!!!', {
         fill: 'white'
     });
     scene.stage.addChild(text);
@@ -13,11 +12,15 @@ function startScene (game) {
             scene.active = false;
         }
     })
+    .on('active', function() {
+        scene.stage.visible = true;
+    })
     .on('inactive', function () {
         scene.stage.visible = false;
     });
-    scene.active = true;
+    scene.active = false;
+    scene.stage.visible = false;
     return scene;
 }
 
-module.exports = startScene;
+module.exports = winScene;
