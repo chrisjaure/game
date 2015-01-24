@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify index.js -t 6to5ify -o build.js --noparse=pixi.js --im",
     "watch": "watchify index.js -t 6to5ify -o build.js --noparse=pixi.js --debug --im -v",
-    "start": "npm run build && npm run watch & instant 8000"
+    "start": "npm run build && npm run watch & instant 8000",
+    "serve": "npm run build && python -m SimpleHTTPServer"
   },
   "keywords": [
     "game"
