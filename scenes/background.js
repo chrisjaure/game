@@ -8,7 +8,12 @@ function backgroundScene (game) {
 
 	scene.active = false;
     scene.stage.visible = false;
+    game.on('preload', function(assets) {
+    	assets.push('assets/spacebg.png');
+    });
     game.on('load', function() {
+    	var sprite = PIXI.Sprite.fromImage('assets/spacebg.png');
+    	scene.stage.addChild(sprite);
     	var texture = new PIXI.Graphics();
 		texture.beginFill(0x8f0a04);
         texture.drawCircle(0, 0, game.renderer.width);

@@ -27,7 +27,7 @@ function playScene (game) {
 	Laser.preload(game);
 	game.on('load', function() {
 		var player = new Player(game, {
-			x: game.renderer.width / 2,
+			x: game.renderer.width / 4,
 			y: game.renderer.height / 2
 		});
 		var rocks = [];

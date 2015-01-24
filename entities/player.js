@@ -39,10 +39,10 @@ class Player extends Entity {
 		var keyboard = this.game.keyboard;
 
 		if (keyboard.left) {
-			this.entity.x -= this.speed / 4;
+			// this.entity.x -= this.speed / 4;
 		}
 		if (keyboard.right) {
-			this.entity.x += this.speed / 4;
+			// this.entity.x += this.speed / 4;
 		}
 		if (keyboard.up) {
 			this.entity.y -= this.speed;

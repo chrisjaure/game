@@ -41,7 +41,7 @@ class Game extends EventEmitter {
         cb = cb || function(){};
         this.preload(function(){
             this.emit('load');
-            this.ticker = ticker(window, 60)
+            this.ticker = ticker(window, 60, false)
                 .on('tick', this.update.bind(this))
                 .on('draw', this.render.bind(this));
             cb();
