@@ -1,4 +1,21 @@
 var PIXI = require('pixi.js');
+var boxCollide = require('box-collide');
+
+exports.collide = function(collection1, collection2, cb) {
+    if (!Array.isArray(collection1)) {
+        collection1 = [collection1];
+    }
+    if (!Array.isArray(collection2)) {
+        collection2 = [collection2];
+    }
+    collection1.forEach(item1 => {
+        collection2.forEach(item2 => {
+            if (boxCollide(item1.getBoundingBox(), item2.getBoundingBox())) {
+                cb(item1, item2);
+            }
+        });
+    });
+};
 
 exports.frameRange = function(start, end, prefix) {
     var frames = [];
@@ -11,17 +28,6 @@ exports.frameRange = function(start, end, prefix) {
 exports.outOfWorldBounds = function(objectBounds, bounds) {
     // console.log(objectBounds.x, objectBounds.y, objectBounds.x + objectBounds.width, objectBounds.y + objectBounds.height, bounds.width, bounds.height);
     return (objectBounds.x < 0 || objectBounds.y < 0 || objectBounds.x + objectBounds.width > bounds.width || objectBounds.y + objectBounds.height > bounds.height);
-};
-
-exports.setBoundingBox = function(object, opts) {
-    opts = opts || {};
-    var box = new PIXI.Rectangle(
-        opts.x || 0,
-        opts.y || 0,
-        opts.width || object.width,
-        opts.height || object.height
-    );
-    object.body = box;
 };
 
 exports.showBoundingBox = function(object, color) {
@@ -51,20 +57,4 @@ exports.ySort = function(children) {
     return children.sort(function(a, b) {
         return getBottom(a) > getBottom(b);
     });
-};
-
-exports.getBounds = function(entity) {
-    var bounds = {
-        x: entity.x,
-        y: entity.y,
-        width: entity.width,
-        height: entity.height
-    };
-    if (entity.body) {
-        bounds.x += entity.body.x;
-        bounds.y += entity.body.y;
-        bounds.width = entity.body.width;
-        bounds.height = entity.body.height;
-    }
-    return bounds;
 };

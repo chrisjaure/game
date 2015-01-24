@@ -3,23 +3,8 @@ var Scene = require('../engine/scene');
 var Player = require('../entities/player');
 var Laser = require('../entities/laser');
 var Rock = require('../entities/rock');
-var boxCollide = require('box-collide');
+var utils = require('../engine/utils');
 
-function collide (collection1, collection2, cb) {
-	if (!Array.isArray(collection1)) {
-		collection1 = [collection1];
-	}
-	if (!Array.isArray(collection2)) {
-		collection2 = [collection2];
-	}
-	collection1.forEach(item1 => {
-		collection2.forEach(item2 => {
-			if (boxCollide(item1.entity, item2.entity)) {
-				cb(item1, item2);
-			}
-		});
-	});
-}
 
 function playScene (game) {
 	var scene = new Scene(game);
@@ -50,11 +35,7 @@ function playScene (game) {
 			}
 			rocks = rocks.filter(rock => !rock.removed);
 			lasers = lasers.filter(laser => !laser.removed);
-			// collide(rocks, lasers, function(rock, laser) {
-			// 	rock.removeFromScene();
-			// 	laser.removeFromScene();
-			// });
-			collide(player, rocks, function(player, rock) {
+			utils.collide(player, rocks, function(player, rock) {
 				rock.removeFromScene();
 				scene.stage.alpha -= 0.05;
 				player.shineGet();

@@ -36,13 +36,12 @@ class Entity extends EventEmitter {
         this.removed = true;
     }
     getBoundingBox () {
-        let bounds = {
-            // x. 
-        }
-        object.body.x = object.x;
-        object.body.y = object.y;
-        object.body.pivot = object.pivot;
-        object.body.rotation = object.rotation;
+        return {
+            x: this.entity.x,
+            y: this.entity.y,
+            width: this.entity.width,
+            height: this.entity.height
+        };
     }
     render () {
         if (this.game.debug) {
