@@ -4,6 +4,7 @@ var Scene = require('../engine/scene');
 var Player = require('../entities/player');
 var Laser = require('../entities/laser');
 var Rock = require('../entities/rock');
+var Dust = require('../entities/dust');
 var utils = require('../engine/utils');
 
 function playScene (game) {
@@ -17,6 +18,7 @@ function playScene (game) {
 			y: game.renderer.height / 2
 		});
 		var rocks = [];
+		var dust = [];
 		var lasers = [];
 
 		scene.active = false;
@@ -27,25 +29,41 @@ function playScene (game) {
 			player.reset();
 			rocks.forEach(rock => rock.removeFromScene());
 			rocks = [];
+			dust.forEach(d => d.removeFromScene());
+			dust = [];
 			bgMusic.play();
 		});
 		scene.on('inactive', function() {
 			// bgMusic.stop();
 		});
 		scene.on('update', function(time){
-			if (Math.round(time) % 52 === 0) {
+			if (Math.round(time) % 104 === 0) {
 				let rock = new Rock(game);
 				rock.addToScene(scene);
 				rocks.push(rock);
 			}
+			if (Math.round(time) % 52 === 0) {
+				let d = new Dust(game);
+				d.addToScene(scene);
+				dust.push(d);
+			}
 			rocks = rocks.filter(rock => !rock.removed);
+			dust = dust.filter(d => !d.removed);
 			lasers = lasers.filter(laser => !laser.removed);
-			utils.collide(player, rocks, function(player, rock) {
-				rock.removeFromScene();
+			utils.collide(player, dust, function(player, d) {
+				d.removeFromScene();
 				scene.stage.alpha -= 0.03;
 				player.shineGet();
 				if (scene.stage.alpha < 0) {
 					scene.emit('win');
+				}
+			});
+			utils.collide(player, rocks, function(player, rock) {
+				rock.removeFromScene();
+				player.hit();
+				scene.stage.alpha += 0.03;
+				if (scene.stage.alpha > 1) {
+					scene.stage.alpha = 1;
 				}
 			});
 		});

@@ -5,11 +5,10 @@ var random = require('random-ext');
 class Rock extends Entity {
 	constructor (game) {
 		super(...arguments);
-		this.speed = 2;
-		var radius = random.integer(40, 15);
+		this.speed = 3;
 		var entity = this.entity = new game.PIXI.Graphics();
-		entity.beginFill(0x7f8b8f);
-        entity.drawCircle(radius, radius, radius);
+		entity.beginFill(0xfff756);
+        entity.drawCircle(4, 4, 4);
         entity.endFill();
         entity.x = game.renderer.width - entity.width;
         entity.y = random.integer(game.renderer.height - entity.height, entity.height);

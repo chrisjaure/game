@@ -35,6 +35,7 @@ class Player extends Entity {
 		entity.addChild(sprite);
 
 		this.shineGetSound = new Howl({ urls: ['assets/shineget.wav'], volume: 0.6 });
+		this.hitSound = new Howl({ urls: ['assets/hit.wav'] });
 
 		entity.tween = new TWEEN.Tween(entity);
 	}
@@ -46,6 +47,13 @@ class Player extends Entity {
 	shineGet () {
 		this.speed -= 0.1;
 		this.shineGetSound.play();
+	}
+	hit () {
+		this.speed += 0.1;
+		if (this.speed > 6) {
+			this.speed = 6;
+		}
+		this.hitSound.play();
 	}
 	update () {
 		var keyboard = this.game.keyboard;
