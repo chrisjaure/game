@@ -1,5 +1,6 @@
 var PIXI = require('pixi.js');
 var Howl = require('howler').Howl;
+var TWEEN = require('tween.js');
 var Scene = require('../engine/scene');
 var Player = require('../entities/player');
 var Laser = require('../entities/laser');
@@ -10,6 +11,7 @@ var utils = require('../engine/utils');
 function playScene (game) {
 	var scene = new Scene(game);
 	var bgMusic = new Howl({ urls: ['assets/gurdonark_-_Relief.mp3'], volume: 0.5 });
+	var stageTween = new TWEEN.Tween(scene.stage);
 	Player.preload(game);
 	Laser.preload(game);
 	game.on('load', function() {
@@ -52,20 +54,23 @@ function playScene (game) {
 			lasers = lasers.filter(laser => !laser.removed);
 			utils.collide(player, dust, function(player, d) {
 				d.removeFromScene();
-				scene.stage.alpha -= 0.03;
+				stageTween.to({ alpha: '-0.03' }, 200).start();
 				player.shineGet();
-				if (scene.stage.alpha < 0) {
-					scene.emit('win');
-				}
 			});
 			utils.collide(player, rocks, function(player, rock) {
 				rock.removeFromScene();
 				player.hit();
-				scene.stage.alpha += 0.03;
+				stageTween.to({ alpha: '+0.03' }, 200).start();
 				if (scene.stage.alpha > 1) {
 					scene.stage.alpha = 1;
 				}
 			});
+			if (scene.stage.alpha < 0) {
+				scene.emit('win');
+			}
+		});
+		scene.on('render', function(time) {
+			stageTween.update(time);
 		});
 		player.addToScene(scene);
 		player.on('shoot', function () {
