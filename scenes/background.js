@@ -3,19 +3,21 @@ var Scene = require('../engine/scene');
 
 function backgroundScene (game) {
 	var scene = new Scene(game);
-	var scrollSpeed = 0.8;
+	var scrollSpeed = 0.5;
+	var bgPath = 'assets/4954464378_990a3e54a1_b.jpg';
 	var tile;
 
 	scene.active = false;
     scene.stage.visible = false;
     game.on('preload', function(assets) {
-    	assets.push('assets/spacebg.png');
+    	assets.push(bgPath);
     });
     game.on('load', function() {
-    	var sprite = PIXI.Sprite.fromImage('assets/spacebg.png');
+    	var sprite = PIXI.Sprite.fromImage(bgPath);
+    	sprite.scale = { x: 0.65, y: 0.65 };
     	scene.stage.addChild(sprite);
     	var texture = new PIXI.Graphics();
-		texture.beginFill(0x8f0a04);
+		texture.beginFill(0x440002);
         texture.drawCircle(0, 0, game.renderer.width);
         texture.endFill();
     	tile = new PIXI.TilingSprite(texture.generateTexture(), game.renderer.width, game.renderer.height);
@@ -27,14 +29,11 @@ function backgroundScene (game) {
 	});
 	scene.on('update', function() {
 		tile.tilePosition.x -= scrollSpeed;
-		if (game.keyboard.right && !game.keyboard.left) {
-			tile.tilePosition.x -= scrollSpeed * 3;
-		}
 		if (game.keyboard.up) {
-			tile.position.y += 0.5;
+			tile.position.y += 0.2;
 		}
 		if (game.keyboard.down && tile.position.y > tile.height / 2) {
-			tile.position.y -= 0.5;
+			tile.position.y -= 0.2;
 		}
 	});
 	return scene;
