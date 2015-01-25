@@ -1,9 +1,9 @@
 var PIXI = require('pixi.js');
 var kb = require('kb-controls');
-var ticker = require('ticker');
 var EventEmitter = require('eventemitter3');
 var Stats = require('stats-js');
 var utils = require('./utils');
+var raf = require('raf');
 
 class Game extends EventEmitter {
     constructor (width = 620, height = 400) {
@@ -43,13 +43,15 @@ class Game extends EventEmitter {
     }
     boot (cb) {
         cb = cb || function(){};
-        this.preload(function(){
+        this.preload(() => {
             this.emit('load');
-            this.ticker = ticker(window, 60, false)
-                .on('tick', this.update.bind(this))
-                .on('draw', this.render.bind(this));
+            raf(function tick() {
+                this.update();
+                this.render();
+                raf(tick.bind(this));
+            }.bind(this));
             cb();
-        }.bind(this));
+        });
         if (this.debug) {
             this.stats = new Stats();
             // Align top-left
