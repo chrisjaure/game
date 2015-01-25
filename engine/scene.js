@@ -12,9 +12,9 @@ class Scene extends EventEmitter {
                 this.emit('update', time);
             }
         });
-        game.on('render', () => {
+        game.on('render', (time) => {
             if (this[active]) {
-                this.emit('render');
+                this.emit('render', time);
             }
         });
     }

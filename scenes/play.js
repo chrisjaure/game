@@ -33,7 +33,7 @@ function playScene (game) {
 			// bgMusic.stop();
 		});
 		scene.on('update', function(time){
-			if (time % 52 === 0) {
+			if (Math.round(time) % 52 === 0) {
 				let rock = new Rock(game);
 				rock.addToScene(scene);
 				rocks.push(rock);

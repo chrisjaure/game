@@ -26,7 +26,7 @@
     "raf": "^2.0.4",
     "random-ext": "^2.5.0",
     "stats-js": "^1.0.0-alpha1",
-    "ticker": "^0.1.0"
+    "tween.js": "^0.14.0"
   },
   "devDependencies": {
     "instant-server": "^1.0.4",

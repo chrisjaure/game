@@ -45,9 +45,9 @@ class Game extends EventEmitter {
         cb = cb || function(){};
         this.preload(() => {
             this.emit('load');
-            raf(function tick() {
-                this.update();
-                this.render();
+            raf(function tick(time) {
+                this.update(time);
+                this.render(time);
                 raf(tick.bind(this));
             }.bind(this));
             cb();
@@ -61,14 +61,14 @@ class Game extends EventEmitter {
             document.body.appendChild( this.stats.domElement );
         }
     }
-    update () {
-        this.emit('update', Date.now());
+    update (time) {
+        this.emit('update', time);
     }
-    render () {
+    render (time) {
         if (this.debug) {
             this.stats.begin();
         }
-        this.emit('render');
+        this.emit('render', time);
         this.renderer.render(this.stage);
         if (this.debug) {
             this.stats.end();

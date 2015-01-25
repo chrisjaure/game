@@ -1,4 +1,5 @@
 var PIXI = require('pixi.js');
+var TWEEN = require('tween.js');
 var Scene = require('../engine/scene');
 
 function backgroundScene (game) {
@@ -23,6 +24,7 @@ function backgroundScene (game) {
     	tile = new PIXI.TilingSprite(texture.generateTexture(), game.renderer.width, game.renderer.height);
     	tile.position.y = tile.height / 2;
     	scene.stage.addChild(tile);
+    	tile.tween = new TWEEN.Tween(tile.position);
     });
 	scene.on('active', function () {
 	    scene.stage.visible = true;
@@ -31,9 +33,24 @@ function backgroundScene (game) {
 		tile.tilePosition.x -= scrollSpeed;
 		if (game.keyboard.up) {
 			tile.position.y += 0.2;
+			this.tweenTo = '+4';
 		}
 		if (game.keyboard.down && tile.position.y > tile.height / 2) {
 			tile.position.y -= 0.2;
+			this.tweenTo = '-4';
+		}
+		else if (this.tweenTo) {
+			tile.tween
+				.to({ y: this.tweenTo }, 600)
+				.easing(TWEEN.Easing.Quadratic.Out)
+				.start();
+			this.tweenTo = null;
+			this.shouldTween = true;
+		}
+	});
+	scene.on('render', function(time) {
+		if (this.shouldTween) {
+			this.shouldTween = tile.tween.update(time);
 		}
 	});
 	return scene;

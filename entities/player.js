@@ -1,4 +1,5 @@
 var PIXI = require('pixi.js');
+var TWEEN = require('tween.js');
 var utils = require('../engine/utils');
 var Entity = require('../engine/entity');
 var collide = require('box-collide');
@@ -25,7 +26,7 @@ class Player extends Entity {
 		entity.scale = { x: 2, y: 2 };
 
 		var sprite = this.sprite = new PIXI.MovieClip(this.flyFrames);
-		sprite.animationSpeed = 2 / 60;
+		sprite.animationSpeed = 1 / 60;
 		sprite.loop = true;
 		sprite.play();
 		sprite.rotation = Math.PI * 1.5;
@@ -34,6 +35,8 @@ class Player extends Entity {
 		entity.addChild(sprite);
 
 		this.shineGetSound = new Howl({ urls: ['assets/shineget.wav'], volume: 0.6 });
+
+		entity.tween = new TWEEN.Tween(entity);
 	}
 	reset () {
 		this.speed = 6;
@@ -54,10 +57,30 @@ class Player extends Entity {
 			// this.entity.x += this.speed / 4;
 		}
 		if (keyboard.up) {
+			this.shouldTween = false;
 			this.entity.y -= this.speed;
+			this.tweenTo = 'up';
 		}
 		if (keyboard.down) {
+			this.shouldTween = false;
 			this.entity.y += this.speed;
+			this.tweenTo = 'down'; 
+		}
+
+		if (this.tweenTo && !keyboard.up && !keyboard.down) {
+			let tweenTo = 0;
+			this.shouldTween = true;
+			if (this.tweenTo === 'up') {
+				tweenTo = Math.max(0, this.entity.y - this.speed * 2);
+			}
+			else {
+				tweenTo = Math.min(this.game.renderer.height - this.entity.height, this.entity.y + this.speed * 2);
+			}
+			this.entity.tween
+				.to({ y: tweenTo }, 150)
+				.easing(TWEEN.Easing.Quadratic.Out)
+				.start();
+			this.tweenTo = null;
 		}
 
 		// if (keyboard.space) {
@@ -69,6 +92,12 @@ class Player extends Entity {
 		// }
 
 		this.positionInBounds();
+	}
+	render (time) {
+		super.render(...arguments);
+		if (this.shouldTween) {
+			this.shouldTween = this.entity.tween.update(time);
+		}
 	}
 	positionInBounds () {
 		if (this.entity.x < 0) {
