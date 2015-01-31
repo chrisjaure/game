@@ -23,8 +23,8 @@ class Entity extends EventEmitter {
             return;
         }
         this.scene.stage.removeChild(this.entity);
-        if (this.entity.body) {
-            this.entity.body.stage.removeChild(this.entity.body);
+        if (this.body) {
+            this.scene.stage.removeChild(this.body);
         }
         if (this.update) {
             this.scene.removeListener('update', this.boundUpdate);
@@ -36,6 +36,13 @@ class Entity extends EventEmitter {
         this.removed = true;
     }
     getBoundingBox () {
+        if (this.boundingType === 'circle') {
+            return {
+                x: this.entity.x,
+                y: this.entity.y,
+                radius: this.entity.width / 2
+            };
+        }
         return {
             x: this.entity.x,
             y: this.entity.y,
@@ -44,8 +51,8 @@ class Entity extends EventEmitter {
         };
     }
     render () {
-        if (this.game.debug) {
-            utils.showBoundingBox(this.entity);
+        if (this.game.debug && this.scene) {
+            utils.showBoundingBox(this, this.scene.stage);
         }
     }
 }

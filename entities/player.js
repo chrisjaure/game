@@ -13,6 +13,7 @@ class Player extends Entity {
 		super(...arguments);
 		this.assets = ['assets/ship.png'];
 		this.speed = 6;
+		this.boundingType = 'circle';
 
 		var image = new PIXI.ImageLoader(this.assets[0]);
 		image.loadFramedSpriteSheet(32, 32, 'ship');

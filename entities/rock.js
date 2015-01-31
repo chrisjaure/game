@@ -6,6 +6,7 @@ class Rock extends Entity {
 	constructor (game) {
 		super(...arguments);
 		this.speed = 2;
+		this.boundingType = 'circle';
 		var radius = random.integer(40, 15);
 		var entity = this.entity = new game.PIXI.Graphics();
 		entity.beginFill(0x7f8b8f);

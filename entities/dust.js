@@ -2,10 +2,11 @@ var Entity = require('../engine/entity');
 var utils = require('../engine/utils');
 var random = require('random-ext');
 
-class Rock extends Entity {
+class Dust extends Entity {
 	constructor (game) {
 		super(...arguments);
 		this.speed = 3;
+		this.boundingType = 'circle';
 		var entity = this.entity = new game.PIXI.Graphics();
 		entity.beginFill(0xfff756);
         entity.drawCircle(4, 4, 4);
@@ -22,4 +23,4 @@ class Rock extends Entity {
 	}
 }
 
-module.exports = Rock;
+module.exports = Dust;
