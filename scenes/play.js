@@ -1,12 +1,13 @@
 var PIXI = require('pixi.js');
 var Howl = require('howler').Howl;
 var TWEEN = require('tween.js');
+var curry = require('curry');
+var random = require('random-ext');
 var Scene = require('../engine/scene');
 var Player = require('../entities/player');
 var Rock = require('../entities/rock');
 var Dust = require('../entities/dust');
 var utils = require('../engine/utils');
-var curry = require('curry');
 
 function playScene (game) {
 	var scene = new Scene(game);
@@ -77,8 +78,17 @@ function playScene (game) {
 		if (scene.stage.alpha < 0) {
 			scene.emit('win');
 		}
-		if (time - flash.lastVisible > 10) {
+		if (time - flash.lastVisible > 30) {
 			flash.visible = false;
+		}
+		if (time - flash.lastVisible > 120) {
+			scene.stage.position = { x: 0, y: 0};
+		}
+		else if (flash.lastVisible) {
+			scene.stage.position = {
+				x: random.integer(5,-5),
+				y: random.integer(5,-5)
+			};
 		}
 	});
 	scene.on('render', function(time) {
