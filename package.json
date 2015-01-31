@@ -8,7 +8,8 @@
     "build": "browserify index.js -t 6to5ify --noparse=pixi.js --im | uglifyjs -c -d BUILD=true --screw-ie8 > build.js",
     "watch": "watchify index.js -t 6to5ify -o build.js --noparse=pixi.js --debug --im -v",
     "start": "npm run watch & instant 8000",
-    "serve": "npm run build && python -m SimpleHTTPServer"
+    "serve": "npm run build && python -m SimpleHTTPServer",
+    "update-pages": "npm run build && cp build.js new-build.js && git checkout gh-pages && mv new-build.js build.js && git add build.js && git commit -v"
   },
   "keywords": [
     "game"
