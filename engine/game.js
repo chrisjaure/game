@@ -6,7 +6,7 @@ var utils = require('./utils');
 var raf = require('raf');
 
 class Game extends EventEmitter {
-    constructor (width = 620, height = 400) {
+    constructor ({ width = 600, height = 400 }) {
         this.PIXI = PIXI;
         this.width = width;
         this.height = height;

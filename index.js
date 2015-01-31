@@ -1,7 +1,7 @@
 var Game = require('./engine/game');
 
 // new game
-var game = new Game();
+var game = new Game({});
 
 // scenes
 var start = require('./scenes/start')(game);
@@ -24,5 +24,3 @@ win.on('inactive', function(){
 });
 game.debug = true;
 game.boot();
-
-// window.game = game;
