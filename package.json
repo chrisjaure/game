@@ -19,6 +19,7 @@
     "6to5ify": "^3.1.2",
     "box-collide": "^1.0.2",
     "browserify": "^8.0.3",
+    "curry": "^1.2.0",
     "eventemitter3": "^0.1.6",
     "howler": "^1.1.25",
     "kb-controls": "^0.2.0",

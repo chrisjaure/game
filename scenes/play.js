@@ -6,6 +6,7 @@ var Player = require('../entities/player');
 var Rock = require('../entities/rock');
 var Dust = require('../entities/dust');
 var utils = require('../engine/utils');
+var curry = require('curry');
 
 function playScene (game) {
 	var scene = new Scene(game);
@@ -14,6 +15,29 @@ function playScene (game) {
 	var rocks = [];
 	var dust = [];
 	var player;
+	var flash = new PIXI.Graphics();
+
+	var playerRockCollide = function(time, player, rock) {
+		rock.removeFromScene();
+		player.hit();
+		if (scene.stage.alpha < 0.97) {
+			stageTween.to({ alpha: '+0.03' }, 200).start();
+		}
+		flash.visible = true;
+		flash.lastVisible = time;
+	};
+
+	var playerDustCollide = function(time, player, dust) {
+		dust.removeFromScene();
+		stageTween.to({ alpha: '-0.03' }, 200).start();
+		player.shineGet();
+	};
+
+	flash.beginFill(0xffffff);
+	flash.drawRect(0, 0, game.renderer.width, game.renderer.height);
+	flash.endFill();
+	flash.visible = false;
+	scene.stage.addChild(flash);
 	Player.preload(game);
 	game.on('load', function() {
 		scene.active = false;
@@ -47,21 +71,14 @@ function playScene (game) {
 			dust.push(d);
 		}
 		rocks = rocks.filter(rock => !rock.removed);
-		dust = dust.filter(d => !d.removed);
-		utils.collide(player, dust, function(player, d) {
-			d.removeFromScene();
-			stageTween.to({ alpha: '-0.03' }, 200).start();
-			player.shineGet();
-		});
-		utils.collide(player, rocks, function(player, rock) {
-			rock.removeFromScene();
-			player.hit();
-			if (scene.stage.alpha < 0.97) {
-				stageTween.to({ alpha: '+0.03' }, 200).start();
-			}
-		});
+		dust = dust.filter(dust => !dust.removed);
+		utils.collide(player, dust, curry(playerDustCollide)(time));
+		utils.collide(player, rocks, curry(playerRockCollide)(time));
 		if (scene.stage.alpha < 0) {
 			scene.emit('win');
+		}
+		if (time - flash.lastVisible > 10) {
+			flash.visible = false;
 		}
 	});
 	scene.on('render', function(time) {
