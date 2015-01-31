@@ -11,7 +11,7 @@ var utils = require('../engine/utils');
 function playScene (game) {
 	var scene = new Scene(game);
 	var bgMusic = new Howl({ urls: ['assets/gurdonark_-_Relief.mp3'], volume: 0.5 });
-	var stageTween = new TWEEN.Tween(scene.stage);
+	var stageTween;
 	Player.preload(game);
 	Laser.preload(game);
 	game.on('load', function() {
@@ -34,6 +34,7 @@ function playScene (game) {
 			dust.forEach(d => d.removeFromScene());
 			dust = [];
 			bgMusic.play();
+			stageTween = new TWEEN.Tween(scene.stage);
 		});
 		scene.on('inactive', function() {
 			// bgMusic.stop();
@@ -60,9 +61,8 @@ function playScene (game) {
 			utils.collide(player, rocks, function(player, rock) {
 				rock.removeFromScene();
 				player.hit();
-				stageTween.to({ alpha: '+0.03' }, 200).start();
-				if (scene.stage.alpha > 1) {
-					scene.stage.alpha = 1;
+				if (scene.stage.alpha < 0.97) {
+					stageTween.to({ alpha: '+0.03' }, 200).start();
 				}
 			});
 			if (scene.stage.alpha < 0) {
@@ -70,7 +70,9 @@ function playScene (game) {
 			}
 		});
 		scene.on('render', function(time) {
-			stageTween.update(time);
+			if (stageTween) {
+				stageTween.update(time);
+			}
 		});
 		player.addToScene(scene);
 		player.on('shoot', function () {
