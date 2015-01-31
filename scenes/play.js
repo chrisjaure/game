@@ -3,7 +3,6 @@ var Howl = require('howler').Howl;
 var TWEEN = require('tween.js');
 var Scene = require('../engine/scene');
 var Player = require('../entities/player');
-var Laser = require('../entities/laser');
 var Rock = require('../entities/rock');
 var Dust = require('../entities/dust');
 var utils = require('../engine/utils');
@@ -14,10 +13,8 @@ function playScene (game) {
 	var stageTween;
 	var rocks = [];
 	var dust = [];
-	var lasers = [];
 	var player;
 	Player.preload(game);
-	Laser.preload(game);
 	game.on('load', function() {
 		scene.active = false;
 		scene.stage.visible = false;
@@ -26,11 +23,6 @@ function playScene (game) {
 			y: game.renderer.height / 2
 		});
 		player.addToScene(scene);
-		player.on('shoot', function () {
-			let laser = new Laser(game, player.getGunPosition());
-			laser.addToScene(scene);
-			lasers.push(laser);
-		});
 	});
 	scene.on('active', function () {
 		scene.stage.visible = true;
@@ -56,7 +48,6 @@ function playScene (game) {
 		}
 		rocks = rocks.filter(rock => !rock.removed);
 		dust = dust.filter(d => !d.removed);
-		lasers = lasers.filter(laser => !laser.removed);
 		utils.collide(player, dust, function(player, d) {
 			d.removeFromScene();
 			stageTween.to({ alpha: '-0.03' }, 200).start();
