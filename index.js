@@ -1,3 +1,4 @@
+var es6polyfill = require('6to5/polyfill');
 var Game = require('./engine/game');
 
 // new game
@@ -22,5 +23,7 @@ win.on('inactive', function(){
 	play.active = true;
     background.active = true;
 });
-game.debug = true;
+if (typeof BUILD === 'undefined') {
+	game.debug = true;
+}
 game.boot();

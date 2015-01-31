@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify index.js -t 6to5ify -o build.js --noparse=pixi.js --im",
+    "build": "browserify index.js -t 6to5ify --noparse=pixi.js --im | uglifyjs -c -d BUILD=true --screw-ie8 > build.js",
     "watch": "watchify index.js -t 6to5ify -o build.js --noparse=pixi.js --debug --im -v",
-    "start": "npm run build && npm run watch & instant 8000",
+    "start": "npm run watch & instant 8000",
     "serve": "npm run build && python -m SimpleHTTPServer"
   },
   "keywords": [
@@ -16,6 +16,7 @@
   "author": "Chris Jaure",
   "license": "ISC",
   "dependencies": {
+    "6to5": "^3.2.1",
     "6to5ify": "^3.1.2",
     "box-collide": "^1.0.2",
     "browserify": "^8.0.3",
@@ -27,7 +28,8 @@
     "raf": "^2.0.4",
     "random-ext": "^2.5.0",
     "stats-js": "^1.0.0-alpha1",
-    "tween.js": "^0.14.0"
+    "tween.js": "^0.14.0",
+    "uglify-js": "^2.4.16"
   },
   "devDependencies": {
     "instant-server": "^1.0.4",
