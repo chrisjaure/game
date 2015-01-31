@@ -21,8 +21,8 @@ function playScene (game) {
 	var playerRockCollide = function(time, player, rock) {
 		rock.removeFromScene();
 		player.hit();
-		if (scene.stage.alpha < 0.97) {
-			stageTween.to({ alpha: '+0.03' }, 200).start();
+		if (scene.stage.alpha < 0.94) {
+			stageTween.to({ alpha: '+0.06' }, 200).start();
 		}
 		flash.visible = true;
 		flash.lastVisible = time;

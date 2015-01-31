@@ -1,6 +1,7 @@
 var Entity = require('../engine/entity');
 var utils = require('../engine/utils');
 var random = require('random-ext');
+var boxCollide = require('box-collide');
 
 class Rock extends Entity {
 	constructor (game) {
@@ -12,11 +13,11 @@ class Rock extends Entity {
 		entity.beginFill(0x7f8b8f);
         entity.drawCircle(radius, radius, radius);
         entity.endFill();
-        entity.x = game.renderer.width - entity.width;
+        entity.x = game.renderer.width;
         entity.y = random.integer(game.renderer.height - entity.height, entity.height);
 	}
 	update () {
-		if (utils.outOfWorldBounds(this.entity, this.game.renderer)) {
+		if (!boxCollide(this.entity, this.game.worldBounds)) {
 			this.removeFromScene();
             return;
         }

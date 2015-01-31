@@ -1,6 +1,7 @@
 var Entity = require('../engine/entity');
 var utils = require('../engine/utils');
 var random = require('random-ext');
+var boxCollide = require('box-collide');
 
 class Dust extends Entity {
 	constructor (game) {
@@ -11,11 +12,11 @@ class Dust extends Entity {
 		entity.beginFill(0xfff756);
         entity.drawCircle(4, 4, 4);
         entity.endFill();
-        entity.x = game.renderer.width - entity.width;
+        entity.x = game.renderer.width;
         entity.y = random.integer(game.renderer.height - entity.height, entity.height);
 	}
 	update () {
-		if (utils.outOfWorldBounds(this.entity, this.game.renderer)) {
+		if (!boxCollide(this.entity, this.game.worldBounds)) {
 			this.removeFromScene();
             return;
         }

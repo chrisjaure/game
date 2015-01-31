@@ -74,6 +74,14 @@ class Game extends EventEmitter {
             this.stats.end();
         }
     }
+    get worldBounds () {
+        return {
+            x: 0,
+            y: 0,
+            width: this.renderer.width,
+            height: this.renderer.height
+        };
+    }
 }
 
 module.exports = Game;
