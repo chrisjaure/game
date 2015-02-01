@@ -7,6 +7,7 @@ var Scene = require('../engine/scene');
 var Player = require('../entities/player');
 var Rock = require('../entities/rock');
 var Dust = require('../entities/dust');
+var Meter = require('../entities/meter');
 var utils = require('../engine/utils');
 
 function playScene (game) {
@@ -16,7 +17,10 @@ function playScene (game) {
 	var rocks = [];
 	var dust = [];
 	var player;
+	var stardustMeter;
 	var flash = new PIXI.Graphics();
+	var collectedNum = 0;
+	var maxCollected = 32;
 
 	var playerRockCollide = function(time, player, rock) {
 		rock.removeFromScene();
@@ -26,12 +30,19 @@ function playScene (game) {
 		}
 		flash.visible = true;
 		flash.lastVisible = time;
+		collectedNum -= 2;
+		if (collectedNum < 0) {
+			collectedNum = 0;
+		}
+		stardustMeter.setPercent(collectedNum / maxCollected);
 	};
 
 	var playerDustCollide = function(time, player, dust) {
 		dust.removeFromScene();
 		stageTween.to({ alpha: '-0.03' }, 200).start();
 		player.shineGet();
+		collectedNum += 1;
+		stardustMeter.setPercent(collectedNum / maxCollected);
 	};
 
 	flash.beginFill(0xffffff);
@@ -48,6 +59,8 @@ function playScene (game) {
 			y: game.worldBounds.height / 2
 		});
 		player.addToScene(scene);
+		stardustMeter = new Meter(game);
+		stardustMeter.addToScene(scene);
 	});
 	scene.on('active', function () {
 		scene.stage.visible = true;
@@ -59,6 +72,8 @@ function playScene (game) {
 		dust = [];
 		bgMusic.stop().play();
 		stageTween = new TWEEN.Tween(scene.stage);
+		stardustMeter.setPercent(0);
+		collectedNum = 0;
 	});
 	scene.on('update', function(time){
 		if (Math.round(time) % 104 === 0) {
@@ -75,7 +90,7 @@ function playScene (game) {
 		dust = dust.filter(dust => !dust.removed);
 		utils.collide(player, dust, curry(playerDustCollide)(time));
 		utils.collide(player, rocks, curry(playerRockCollide)(time));
-		if (scene.stage.alpha < 0) {
+		if (collectedNum >= maxCollected) {
 			scene.emit('win');
 		}
 		if (time - flash.lastVisible > 30) {
