@@ -51,7 +51,9 @@ function startScene (game) {
         panes[activePane].visible = false;
         panes[++activePane].visible = true;
     };
-    var prompt = new PIXI.Text('Press space to continue.', { fill: 'white', font: '14px Arial' });
+    var prompt = new PIXI.Text('Press space to continue.', { fill: 'white', font: '32px Arial' });
+    prompt.height = prompt.height / game.renderer.resolution;
+    prompt.width = prompt.width / game.renderer.resolution;
     scene.stage.addChild(prompt);
     prompt.position = {
         x: game.worldBounds.width - prompt.width - 10,
