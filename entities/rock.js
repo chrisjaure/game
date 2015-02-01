@@ -13,8 +13,8 @@ class Rock extends Entity {
 		entity.beginFill(0x7f8b8f);
         entity.drawCircle(radius, radius, radius);
         entity.endFill();
-        entity.x = game.renderer.width;
-        entity.y = random.integer(game.renderer.height - entity.height, entity.height);
+        entity.x = game.worldBounds.width;
+        entity.y = random.integer(game.worldBounds.height - entity.height, entity.height);
 	}
 	update () {
 		if (!boxCollide(this.entity, this.game.worldBounds)) {

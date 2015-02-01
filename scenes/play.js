@@ -35,7 +35,7 @@ function playScene (game) {
 	};
 
 	flash.beginFill(0xffffff);
-	flash.drawRect(0, 0, game.renderer.width, game.renderer.height);
+	flash.drawRect(0, 0, game.worldBounds.width, game.worldBounds.height);
 	flash.endFill();
 	flash.visible = false;
 	scene.stage.addChild(flash);
@@ -44,8 +44,8 @@ function playScene (game) {
 		scene.active = false;
 		scene.stage.visible = false;
 		player = new Player(game, {
-			x: game.renderer.width / 6,
-			y: game.renderer.height / 2
+			x: game.worldBounds.width / 6,
+			y: game.worldBounds.height / 2
 		});
 		player.addToScene(scene);
 	});

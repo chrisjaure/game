@@ -83,7 +83,7 @@ class Player extends Entity {
 				tweenTo = Math.max(0, this.entity.y - this.speed * 2);
 			}
 			else {
-				tweenTo = Math.min(this.game.renderer.height - this.entity.height, this.entity.y + this.speed * 2);
+				tweenTo = Math.min(this.game.worldBounds.height - this.entity.height, this.entity.y + this.speed * 2);
 			}
 			this.entity.tween
 				.to({ y: tweenTo }, 150)
@@ -109,17 +109,18 @@ class Player extends Entity {
 		}
 	}
 	positionInBounds () {
+		var worldBounds = this.game.worldBounds;
 		if (this.entity.x < 0) {
 			this.entity.x = 0;
 		}
 		if (this.entity.y < 0) {
 			this.entity.y = 0;
 		}
-		if (this.entity.x + this.entity.width > this.game.renderer.width) {
-			this.entity.x = this.game.renderer.width - this.entity.width;
+		if (this.entity.x + this.entity.width > worldBounds.width) {
+			this.entity.x = worldBounds.width - this.entity.width;
 		}
-		if (this.entity.y + this.entity.height > this.game.renderer.height) {
-			this.entity.y = this.game.renderer.height - this.entity.height;
+		if (this.entity.y + this.entity.height > worldBounds.height) {
+			this.entity.y = worldBounds.height - this.entity.height;
 		}
 	}
 	getGunPosition () {

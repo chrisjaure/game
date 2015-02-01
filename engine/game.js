@@ -6,14 +6,18 @@ var utils = require('./utils');
 var raf = require('raf');
 
 class Game extends EventEmitter {
-    constructor ({ width = 600, height = 400, background = 0xffffff }) {
+    constructor ({ width = 600, height = 400, background = 0xffffff, resolution = window.devicePixelRatio }) {
         this.PIXI = PIXI;
         this.width = width;
         this.height = height;
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 
         this.stage = new PIXI.Stage(background);
-        this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
+        this.renderer = PIXI.autoDetectRenderer(width, height, {
+            resolution: resolution
+        });
+        this.renderer.view.style.width = width + 'px';
+        this.renderer.view.style.height = height + 'px';
         document.body.appendChild(this.renderer.view);
 
         this.keyboard = kb({
@@ -78,8 +82,8 @@ class Game extends EventEmitter {
         return {
             x: 0,
             y: 0,
-            width: this.renderer.width,
-            height: this.renderer.height
+            width: this.renderer.width / this.renderer.resolution,
+            height: this.renderer.height / this.renderer.resolution
         };
     }
 }
