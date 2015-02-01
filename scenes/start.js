@@ -15,22 +15,25 @@ restless,
 a little older than the first
 mumbles,
 
-"What now?"
-
-"Sissy, I can't sleep."`,
+"What now?"`,
 
 // pane 
-`After a thoughtful pause
-the second voice replied,
+`"Sissy, I can't sleep."
+
+After a thoughtful pause
+the second voice replies,
 
 "Hmm. I know what will make you sleepy."
 
-"What?"
-
-"Stardust!"`,
+"What?"`,
 
 // pane
-`And together they chanted,
+`"Stardust!"
+
+"OK!
+But we better watch out for asteroids."
+
+And together they chanted,
 
 "3, 2, 1, blast off!"`
 ];

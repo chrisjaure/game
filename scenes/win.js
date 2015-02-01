@@ -4,12 +4,12 @@ var Scene = require('../engine/scene');
 
 function winScene (game) {
     var scene = new Scene(game);
-    var text = new PIXI.Text(`And the two girls put their heavy heads down
-and drift peacefully off to sleep.`, {
+    var text = new PIXI.Text(`Finally the two girls
+laying their heavy heads down
+drift peacefully off to sleep.`, {
         fill: 'white'
     });
     var bg = new PIXI.Graphics();
-    var bgTween;
 
     bg.beginFill(0x1e1f33);
     bg.drawRect(game.worldBounds.x, game.worldBounds.y, game.worldBounds.width, game.worldBounds.height);
@@ -26,16 +26,26 @@ and drift peacefully off to sleep.`, {
     })
     .on('active', function() {
         scene.stage.visible = true;
+        text.alpha = 0;
+        text.tween = null;
         bg.alpha = 0;
-        bgTween = new TWEEN.Tween(bg);
-        bgTween.to({ alpha: 1 }, 5000).start();
+        bg.tween = new TWEEN.Tween(bg);
+        bg.tween.to({ alpha: 1 }, 2000)
+        .onComplete(function() {
+            bg.tween = null;
+            text.tween = new TWEEN.Tween(text).to({ alpha: 1 }, 1000).start();
+        })
+        .start();
     })
     .on('inactive', function () {
         scene.stage.visible = false;
     })
     .on('update', function(time) {
-        if (bgTween) {
-            bgTween.update(time);
+        if (bg.tween) {
+            bg.tween.update(time);
+        }
+        if (text.tween) {
+            text.tween.update(time);
         }
     });
     scene.active = false;
