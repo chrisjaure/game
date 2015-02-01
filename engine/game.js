@@ -6,13 +6,13 @@ var utils = require('./utils');
 var raf = require('raf');
 
 class Game extends EventEmitter {
-    constructor ({ width = 600, height = 400 }) {
+    constructor ({ width = 600, height = 400, background = 0xffffff }) {
         this.PIXI = PIXI;
         this.width = width;
         this.height = height;
         PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
 
-        this.stage = new PIXI.Stage(0x1e1f33);
+        this.stage = new PIXI.Stage(background);
         this.renderer = PIXI.autoDetectRenderer(this.width, this.height);
         document.body.appendChild(this.renderer.view);
 

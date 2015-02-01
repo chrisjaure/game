@@ -2,7 +2,7 @@ var es6polyfill = require('6to5/polyfill');
 var Game = require('./engine/game');
 
 // new game
-var game = new Game({});
+var game = new Game({ background: 0x1e1f33 });
 
 // scenes
 var start = require('./scenes/start')(game);
