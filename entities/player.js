@@ -50,7 +50,7 @@ class Player extends Entity {
 		this.shineGetSound.play();
 	}
 	hit () {
-		this.speed += 0.1;
+		this.speed += 0.2;
 		if (this.speed > 6) {
 			this.speed = 6;
 		}
