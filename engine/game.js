@@ -7,6 +7,7 @@ var raf = require('raf');
 
 class Game extends EventEmitter {
     constructor ({ width = 600, height = 400, background = 0xffffff, resolution = window.devicePixelRatio }) {
+        super();
         this.PIXI = PIXI;
         this.width = width;
         this.height = height;

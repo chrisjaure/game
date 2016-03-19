@@ -4,6 +4,7 @@ var active = Symbol('active');
 
 class Scene extends EventEmitter {
     constructor (game) {
+        super();
         this.game = game;
         this.stage = new PIXI.DisplayObjectContainer();
         game.stage.addChild(this.stage);

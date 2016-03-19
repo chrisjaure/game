@@ -4,6 +4,7 @@ var utils = require('./utils');
 
 class Entity extends EventEmitter {
     constructor (game, options) {
+        super();
         this.game = game;
         this.options = options;
     }

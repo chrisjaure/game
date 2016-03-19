@@ -1,12 +1,12 @@
 {
   "name": "game",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Our first game",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify index.js -t 6to5ify --noparse=pixi.js --im | uglifyjs -c -d BUILD=true --screw-ie8 > build.js",
-    "watch": "watchify index.js -t 6to5ify -o build.js --noparse=pixi.js --debug --im -v",
+    "build": "browserify index.js --noparse=pixi.js --im | uglifyjs -c -d BUILD=true --screw-ie8 > build.js",
+    "watch": "watchify index.js -o build.js --noparse=pixi.js --debug --im -v",
     "start": "npm run watch & instant 8000",
     "serve": "npm run build && python -m SimpleHTTPServer",
     "update-pages": "npm run build && cp build.js new-build.js && git checkout gh-pages && mv new-build.js build.js && git add build.js && git commit -v"
@@ -17,8 +17,7 @@
   "author": "Chris Jaure",
   "license": "ISC",
   "dependencies": {
-    "6to5": "^3.2.1",
-    "6to5ify": "^3.1.2",
+    "babel-polyfill": "^6.7.2",
     "box-collide": "^1.0.2",
     "browserify": "^8.0.3",
     "curry": "^1.2.0",
@@ -33,8 +32,22 @@
     "uglify-js": "^2.4.16"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.6.0",
+    "babelify": "^7.2.0",
     "instant-server": "^1.0.4",
     "watchify": "^2.2.1"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
   },
   "jshintConfig": {
     "esnext": true

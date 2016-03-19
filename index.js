@@ -1,4 +1,4 @@
-var es6polyfill = require('6to5/polyfill');
+var es6polyfill = require('babel-polyfill');
 var Game = require('./engine/game');
 
 // new game
