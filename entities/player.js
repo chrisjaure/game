@@ -15,19 +15,18 @@ class Player extends Entity {
 		this.speed = 6;
 		this.boundingType = 'circle';
 
-		var image = new PIXI.ImageLoader(this.assets[0]);
-		image.loadFramedSpriteSheet(32, 32, 'ship');
+		var frames = utils.getFramesFromSpriteSheet(PIXI.utils.TextureCache[this.assets[0]].baseTexture, 32, 32)
 
-		this.flyFrames = image.frames.slice(1, 5);
-		this.stopFrames = image.frames.slice(5, 12);
+		this.flyFrames = frames.slice(1, 5);
+		this.stopFrames = frames.slice(5, 12);
 
-		var entity = this.entity = new PIXI.DisplayObjectContainer();
+		var entity = this.entity = new PIXI.Container();
 		entity.x = this.options.x || 0;
 		entity.y = this.options.y || 0;
 		entity.scale = { x: 2, y: 2 };
 
-		var sprite = this.sprite = new PIXI.MovieClip(this.flyFrames);
-		sprite.animationSpeed = 1 / 60;
+		var sprite = this.sprite = new PIXI.extras.MovieClip(this.flyFrames);
+		sprite.animationSpeed = 1 / 5;
 		sprite.loop = true;
 		sprite.play();
 		sprite.rotation = Math.PI * 1.5;
@@ -73,7 +72,7 @@ class Player extends Entity {
 		if (keyboard.down) {
 			this.shouldTween = false;
 			this.entity.y += this.speed;
-			this.tweenTo = 'down'; 
+			this.tweenTo = 'down';
 		}
 
 		if (this.tweenTo && !keyboard.up && !keyboard.down) {

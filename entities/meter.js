@@ -4,7 +4,7 @@ var utils = require('../engine/utils');
 class Meter extends Entity {
 	constructor (game) {
 		super(...arguments);
-		var entity = this.entity = new game.PIXI.DisplayObjectContainer();
+		var entity = this.entity = new game.PIXI.Container();
 		var outline = this.outline = new game.PIXI.Graphics();
 		var bar = this.bar = new game.PIXI.Graphics();
 		outline.lineStyle(1, 0x000000);

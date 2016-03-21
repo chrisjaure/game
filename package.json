@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify index.js --noparse=pixi.js --im | uglifyjs -c -d BUILD=true --screw-ie8 > build.js",
-    "watch": "watchify index.js -o build.js --noparse=pixi.js --debug --im -v",
+    "build": "browserify index.js | uglifyjs -c -d BUILD=true --screw-ie8 > build.js",
+    "watch": "watchify index.js --outfile build.js --debug --verbose",
     "start": "npm run watch & instant --port 8000 --open --quiet",
     "serve": "npm run build && python -m SimpleHTTPServer",
     "update-pages": "npm run build && cp build.js new-build.js && git checkout gh-pages && mv new-build.js build.js && git add build.js && git commit -v"
@@ -23,7 +23,7 @@
     "eventemitter3": "^1.2.0",
     "howler": "^1.1.25",
     "kb-controls": "^0.2.0",
-    "pixi.js": "^2.2.0",
+    "pixi.js": "^3.0.10",
     "raf": "^3.2.0",
     "random-ext": "^2.5.0",
     "stats-js": "^1.0.0-alpha1",

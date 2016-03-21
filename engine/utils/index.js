@@ -5,7 +5,7 @@ var circleCollide = function(circle1, circle2) {
     var dx = (circle1.x + circle1.radius) - (circle2.x + circle2.radius);
     var dy = (circle1.y + circle1.radius) - (circle2.y + circle2.radius);
     var distance = Math.sqrt(dx * dx + dy * dy);
-    
+
     return (distance < circle1.radius + circle2.radius);
 };
 
@@ -62,3 +62,11 @@ exports.showBoundingBox = function(object, stage) {
         object.body.drawRect(0, 0, bounds.width, bounds.height);
     }
 };
+
+exports.getFramesFromSpriteSheet = function(baseTexture, frameWidth, frameHeight) {
+    var frames = [];
+    for (var i = 0; i < baseTexture.width - frameWidth; i += frameWidth) {
+        frames.push(new PIXI.Texture(baseTexture, new PIXI.Rectangle(i, 0, frameWidth, frameHeight)));
+    }
+    return frames;
+}

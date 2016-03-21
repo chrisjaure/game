@@ -11,9 +11,9 @@ class Game extends EventEmitter {
         this.PIXI = PIXI;
         this.width = width;
         this.height = height;
-        PIXI.scaleModes.DEFAULT = PIXI.scaleModes.NEAREST;
+        PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 
-        this.stage = new PIXI.Stage(background);
+        this.stage = new PIXI.Container(background);
         this.renderer = PIXI.autoDetectRenderer(width, height, {
             resolution: resolution
         });
@@ -35,12 +35,11 @@ class Game extends EventEmitter {
     }
     preload (cb) {
         var assets = [];
-        var loader;
         this.emit('preload', assets);
         if (assets.length) {
-            loader = new PIXI.AssetLoader(assets);
-            loader.on('onComplete', cb);
-            loader.load();
+            assets.forEach((asset) => PIXI.loader.add(asset, asset));
+            PIXI.loader.on('complete', cb);
+            PIXI.loader.load();
         }
         else {
             cb();

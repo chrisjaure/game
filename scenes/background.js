@@ -21,7 +21,7 @@ function backgroundScene (game) {
 		texture.beginFill(0x440002);
         texture.drawCircle(0, 0, game.renderer.width);
         texture.endFill();
-    	tile = new PIXI.TilingSprite(texture.generateTexture(), game.renderer.width, game.renderer.height);
+    	tile = new PIXI.extras.TilingSprite(texture.generateTexture(), game.renderer.width, game.renderer.height);
     	tile.position.y = tile.height / 2;
     	scene.stage.addChild(tile);
     	tile.tween = new TWEEN.Tween(tile.position);
