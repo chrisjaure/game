@@ -1,9 +1,9 @@
-var PIXI = require('pixi.js');
-var EventEmitter = require('eventemitter3');
-var active = Symbol('active');
+import PIXI from 'pixi.js';
+import EventEmitter from 'eventemitter3';
+const active = Symbol('active');
 
-class Scene extends EventEmitter {
-    constructor (game) {
+export default class Scene extends EventEmitter {
+    constructor(game) {
         super();
         this.game = game;
         this.stage = new PIXI.Container();
@@ -19,14 +19,12 @@ class Scene extends EventEmitter {
             }
         });
     }
-    set active (value) {
-        var event = (value) ? 'active' : 'inactive';
+    set active(value) {
+        const event = (value) ? 'active' : 'inactive';
         this[active] = value;
         this.emit(event);
     }
-    get active () {
+    get active() {
         return this[active];
     }
 }
-
-module.exports = Scene;

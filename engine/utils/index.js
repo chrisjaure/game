@@ -1,15 +1,15 @@
-var PIXI = require('pixi.js');
-var boxCollide = require('box-collide');
+import PIXI from 'pixi.js';
+import boxCollide from 'box-collide';
 
-var circleCollide = function(circle1, circle2) {
-    var dx = (circle1.x + circle1.radius) - (circle2.x + circle2.radius);
-    var dy = (circle1.y + circle1.radius) - (circle2.y + circle2.radius);
-    var distance = Math.sqrt(dx * dx + dy * dy);
+const circleCollide = (circle1, circle2) => {
+    const dx = (circle1.x + circle1.radius) - (circle2.x + circle2.radius);
+    const dy = (circle1.y + circle1.radius) - (circle2.y + circle2.radius);
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
     return (distance < circle1.radius + circle2.radius);
 };
 
-exports.collide = function(collection1, collection2, cb) {
+export function collide(collection1, collection2, cb) {
     if (!Array.isArray(collection1)) {
         collection1 = [collection1];
     }
@@ -17,9 +17,9 @@ exports.collide = function(collection1, collection2, cb) {
         collection2 = [collection2];
     }
     collection1.forEach(item1 => {
-        let item1Bounds = item1.getBoundingBox();
+        const item1Bounds = item1.getBoundingBox();
         collection2.forEach(item2 => {
-            let item2Bounds = item2.getBoundingBox();
+            const item2Bounds = item2.getBoundingBox();
             if (item1Bounds.radius !== undefined && item2Bounds.radius !== undefined) {
                 if (circleCollide(item1Bounds, item2Bounds)) {
                     cb(item1, item2);
@@ -32,21 +32,21 @@ exports.collide = function(collection1, collection2, cb) {
     });
 };
 
-exports.frameRange = function(start, end, prefix) {
-    var frames = [];
-    for (var i = start; i <= end; i++) {
+export function frameRange(start, end, prefix) {
+    const frames = [];
+    for (let i = start; i <= end; i++) {
         frames.push(new PIXI.Texture.fromFrame((prefix || null) + i));
     }
     return frames;
 };
 
-exports.showBoundingBox = function(object, stage) {
+export function showBoundingBox(object, stage) {
     if (!stage) {
         return;
     }
-    var bounds = object.getBoundingBox();
+    const bounds = object.getBoundingBox();
     if (!object.body) {
-        let box = new PIXI.Graphics();
+        const box = new PIXI.Graphics();
         box.alpha = 0.3;
         stage.addChild(box);
         object.body = box;
@@ -63,10 +63,12 @@ exports.showBoundingBox = function(object, stage) {
     }
 };
 
-exports.getFramesFromSpriteSheet = function(baseTexture, frameWidth, frameHeight) {
-    var frames = [];
-    for (var i = 0; i < baseTexture.width - frameWidth; i += frameWidth) {
-        frames.push(new PIXI.Texture(baseTexture, new PIXI.Rectangle(i, 0, frameWidth, frameHeight)));
+export function getFramesFromSpriteSheet(baseTexture, frameWidth, frameHeight) {
+    const frames = [];
+    for (let i = 0; i < baseTexture.width - frameWidth; i += frameWidth) {
+        frames.push(
+            new PIXI.Texture(baseTexture, new PIXI.Rectangle(i, 0, frameWidth, frameHeight))
+        );
     }
     return frames;
 }

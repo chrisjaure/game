@@ -1,14 +1,14 @@
-var PIXI = require('pixi.js');
-var EventEmitter = require('eventemitter3');
-var utils = require('./utils');
+import PIXI from 'pixi.js';
+import EventEmitter from 'eventemitter3';
+import { showBoundingBox } from './utils';
 
-class Entity extends EventEmitter {
-    constructor (game, options) {
+export default class Entity extends EventEmitter {
+    constructor(game, options) {
         super();
         this.game = game;
         this.options = options;
     }
-    addToScene (scene) {
+    addToScene(scene) {
         scene.stage.addChild(this.entity);
         if (this.update) {
             this.boundUpdate = this.update.bind(this);
@@ -19,7 +19,7 @@ class Entity extends EventEmitter {
         }
         this.scene = scene;
     }
-    removeFromScene () {
+    removeFromScene() {
         if (!this.scene) {
             return;
         }
@@ -36,7 +36,7 @@ class Entity extends EventEmitter {
         this.scene = null;
         this.removed = true;
     }
-    getBoundingBox () {
+    getBoundingBox() {
         if (this.boundingType === 'circle') {
             return {
                 x: this.entity.x,
@@ -51,11 +51,9 @@ class Entity extends EventEmitter {
             height: this.entity.height
         };
     }
-    render () {
+    render() {
         if (this.game.debug && this.scene) {
-            utils.showBoundingBox(this, this.scene.stage);
+            showBoundingBox(this, this.scene.stage);
         }
     }
 }
-
-module.exports = Entity;

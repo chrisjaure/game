@@ -1,6 +1,6 @@
-var PIXI = require('pixi.js');
-var kb = require('kb-controls');
-var Scene = require('../engine/scene');
+import PIXI from 'pixi.js';
+import kb from 'kb-controls';
+import Scene from '../engine/scene';
 
 const introText = [
 // pane
@@ -17,7 +17,7 @@ mumbles,
 
 "What now?"`,
 
-// pane 
+// pane
 `"Sissy, I can't sleep."
 
 After a thoughtful pause
@@ -38,12 +38,12 @@ And together they chanted,
 "3, 2, 1, blast off!"`
 ];
 
-function startScene (game) {
-    var scene = new Scene(game);
-    var panes;
-    var activePane = 0;
-    var shouldTransition = false;
-    var transitionPane = function() {
+export default function startScene(game) {
+    const scene = new Scene(game);
+    let panes;
+    let activePane = 0;
+    let shouldTransition = false;
+    const transitionPane = () => {
         if (activePane === panes.length - 1) {
             scene.active = false;
             return;
@@ -51,7 +51,7 @@ function startScene (game) {
         panes[activePane].visible = false;
         panes[++activePane].visible = true;
     };
-    var prompt = new PIXI.Text('Press space to continue.', { fill: 'white', font: '32px Arial' });
+    const prompt = new PIXI.Text('Press space to continue.', { fill: 'white', font: '32px Arial' });
     prompt.height = prompt.height / game.renderer.resolution;
     prompt.width = prompt.width / game.renderer.resolution;
     scene.stage.addChild(prompt);
@@ -70,12 +70,12 @@ function startScene (game) {
             shouldTransition = true;
         }
     })
-    .on('inactive', function () {
+    .on('inactive', () => {
         scene.stage.visible = false;
     });
     scene.active = true;
     panes = introText.map(text => {
-        var pane = makeTextPane(text);
+        const pane = makeTextPane(text);
         pane.visible = false;
         scene.stage.addChild(pane);
         return pane;
@@ -84,12 +84,10 @@ function startScene (game) {
     return scene;
 }
 
-function makeTextPane (text) {
-    var pane = new PIXI.Text(text, {
+function makeTextPane(text) {
+    const pane = new PIXI.Text(text, {
         fill: 'white'
     });
     pane.position = {x: 10, y: 10 };
     return pane;
 }
-
-module.exports = startScene;

@@ -1,12 +1,12 @@
-var PIXI = require('pixi.js');
-var kb = require('kb-controls');
-var EventEmitter = require('eventemitter3');
-var Stats = require('stats-js');
-var utils = require('./utils');
-var raf = require('raf');
+import PIXI from 'pixi.js';
+import kb from 'kb-controls';
+import EventEmitter from 'eventemitter3';
+import Stats from 'stats-js';
+import raf from 'raf';
 
-class Game extends EventEmitter {
-    constructor ({ width = 600, height = 400, background = 0xffffff, resolution = window.devicePixelRatio }) {
+export default class Game extends EventEmitter {
+    constructor(
+        { width = 600, height = 400, background = 0xffffff, resolution = window.devicePixelRatio }) {
         super();
         this.PIXI = PIXI;
         this.width = width;
@@ -15,10 +15,10 @@ class Game extends EventEmitter {
 
         this.stage = new PIXI.Container(background);
         this.renderer = PIXI.autoDetectRenderer(width, height, {
-            resolution: resolution
+            resolution
         });
-        this.renderer.view.style.width = width + 'px';
-        this.renderer.view.style.height = height + 'px';
+        this.renderer.view.style.width = `${width}px`;
+        this.renderer.view.style.height = `${height}px`;
         document.body.appendChild(this.renderer.view);
 
         this.keyboard = kb({
@@ -33,8 +33,8 @@ class Game extends EventEmitter {
             '<space>': 'space'
         });
     }
-    preload (cb) {
-        var assets = [];
+    preload(cb) {
+        const assets = [];
         this.emit('preload', assets);
         if (assets.length) {
             assets.forEach((asset) => PIXI.loader.add(asset, asset));
@@ -45,8 +45,7 @@ class Game extends EventEmitter {
             cb();
         }
     }
-    boot (cb) {
-        cb = cb || function(){};
+    boot(cb=() => {}) {
         this.preload(() => {
             this.emit('load');
             raf(function tick(time) {
@@ -62,13 +61,13 @@ class Game extends EventEmitter {
             this.stats.domElement.style.position = 'absolute';
             this.stats.domElement.style.left = '0px';
             this.stats.domElement.style.top = '0px';
-            document.body.appendChild( this.stats.domElement );
+            document.body.appendChild(this.stats.domElement);
         }
     }
-    update (time) {
+    update(time) {
         this.emit('update', time);
     }
-    render (time) {
+    render(time) {
         if (this.debug) {
             this.stats.begin();
         }
@@ -78,7 +77,7 @@ class Game extends EventEmitter {
             this.stats.end();
         }
     }
-    get worldBounds () {
+    get worldBounds() {
         return {
             x: 0,
             y: 0,
@@ -87,5 +86,3 @@ class Game extends EventEmitter {
         };
     }
 }
-
-module.exports = Game;

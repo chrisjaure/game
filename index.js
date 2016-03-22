@@ -1,29 +1,33 @@
-var es6polyfill = require('babel-polyfill');
-var Game = require('./engine/game');
+import es6polyfill from 'babel-polyfill';
+import Game from './engine/game';
+import createStartScene from './scenes/start';
+import createBackgroundScene from './scenes/background';
+import createPlayScene from './scenes/play';
+import createWinScene from './scenes/win';
 
 // new game
-var game = new Game({ background: 0x1e1f33 });
+const game = new Game({ background: 0x1e1f33 });
 
 // scenes
-var start = require('./scenes/start')(game);
-var background = require('./scenes/background')(game);
-var play = require('./scenes/play')(game);
-var win = require('./scenes/win')(game);
+const start = createStartScene(game);
+const background = createBackgroundScene(game);
+const play = createPlayScene(game);
+const win = createWinScene(game);
 
-start.on('inactive', function () {
+start.on('inactive', () => {
     play.active = true;
     background.active = true;
 });
-play.on('win', function() {
-	play.active = false;
-	background.active = false;
-	win.active = true;
+play.on('win', () => {
+    play.active = false;
+    background.active = false;
+    win.active = true;
 });
-win.on('inactive', function(){
-	play.active = true;
+win.on('inactive', () => {
+    play.active = true;
     background.active = true;
 });
 if (typeof BUILD === 'undefined') {
-	game.debug = true;
+    game.debug = true;
 }
 game.boot();
