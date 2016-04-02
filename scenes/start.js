@@ -69,11 +69,7 @@ export default function startScene(game) {
         else {
             shouldTransition = true;
         }
-    })
-    .on('inactive', () => {
-        scene.stage.visible = false;
     });
-    scene.active = true;
     panes = introText.map(text => {
         const pane = makeTextPane(text);
         pane.visible = false;

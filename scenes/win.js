@@ -30,7 +30,6 @@ drift peacefully off to sleep.`, {
         }
     })
     .on('active', () => {
-        scene.stage.visible = true;
         text.alpha = 0;
         text.tween = null;
         bg.alpha = 0;
@@ -42,9 +41,6 @@ drift peacefully off to sleep.`, {
         })
         .start();
     })
-    .on('inactive', () => {
-        scene.stage.visible = false;
-    })
     .on('update', time => {
         if (bg.tween) {
             bg.tween.update(time);
@@ -53,7 +49,5 @@ drift peacefully off to sleep.`, {
             text.tween.update(time);
         }
     });
-    scene.active = false;
-    scene.stage.visible = false;
     return scene;
 }

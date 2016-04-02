@@ -1,5 +1,6 @@
 import PIXI from 'pixi.js';
 import boxCollide from 'box-collide';
+import TWEEN from 'tween.js';
 
 const circleCollide = (circle1, circle2) => {
     const dx = (circle1.x + circle1.radius) - (circle2.x + circle2.radius);

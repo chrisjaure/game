@@ -11,7 +11,7 @@ import Meter from '../entities/meter';
 import { collide } from '../engine/utils';
 
 export default function playScene(game) {
-    const scene = new Scene(game);
+    const scene = new Scene(game, { hideOnInactive: false });
     const bgMusic = new Howl({ urls: ['assets/gurdonark_-_Relief.mp3'], volume: 0.5 });
     const flash = new PIXI.Graphics();
     const maxCollected = 32;
@@ -52,8 +52,6 @@ export default function playScene(game) {
     scene.stage.addChild(flash);
     Player.preload(game);
     game.on('load', () => {
-        scene.active = false;
-        scene.stage.visible = false;
         player = new Player(game, {
             x: game.worldBounds.width / 6,
             y: game.worldBounds.height / 2
@@ -63,7 +61,6 @@ export default function playScene(game) {
         stardustMeter.addToScene(scene);
     });
     scene.on('active', () => {
-        scene.stage.visible = true;
         scene.stage.alpha = 1;
         player.reset();
         rocks.forEach(rock => rock.removeFromScene());

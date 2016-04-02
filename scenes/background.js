@@ -3,13 +3,11 @@ import TWEEN from 'tween.js';
 import Scene from '../engine/scene';
 
 export default function backgroundScene(game) {
-    const scene = new Scene(game);
+    const scene = new Scene(game, { hideOnInactive: false });
     const scrollSpeed = 0.5;
     const bgPath = 'assets/4954464378_990a3e54a1_b.jpg';
     let tile;
 
-    scene.active = false;
-    scene.stage.visible = false;
     game.on('preload', (assets) => {
         assets.push(bgPath);
     });
@@ -25,9 +23,6 @@ export default function backgroundScene(game) {
         tile.position.y = tile.height / 2;
         scene.stage.addChild(tile);
         tile.tween = new TWEEN.Tween(tile.position);
-    });
-    scene.on('active', () => {
-        scene.stage.visible = true;
     });
     scene.on('update', () => {
         tile.tilePosition.x -= scrollSpeed;

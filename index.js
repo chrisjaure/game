@@ -1,5 +1,6 @@
 import es6polyfill from 'babel-polyfill';
 import Game from './engine/game';
+import createSplashScene from './scenes/splash';
 import createStartScene from './scenes/start';
 import createBackgroundScene from './scenes/background';
 import createPlayScene from './scenes/play';
@@ -9,11 +10,16 @@ import createWinScene from './scenes/win';
 const game = new Game({ background: 0x1e1f33 });
 
 // scenes
+const splash = createSplashScene(game);
 const start = createStartScene(game);
 const background = createBackgroundScene(game);
 const play = createPlayScene(game);
 const win = createWinScene(game);
 
+splash.active = true;
+splash.on('inactive', () => {
+    start.active = true;
+});
 start.on('inactive', () => {
     play.active = true;
     background.active = true;
